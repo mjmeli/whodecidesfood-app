@@ -35,3 +35,9 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Vue
+dist/
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
