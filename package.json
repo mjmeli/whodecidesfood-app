@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Vue.js-based front end of the whodecidesfood web application",
   "author": "Michael Meli <me@michaelmeli.com> (http://michaelmeli.com)",
-  "contributors": [{
-    "name": "Kylie Geller",
-    "email": "<kylie@michaelmeli.com>"
-  }],
+  "contributors": [
+    {
+      "name": "Kylie Geller",
+      "email": "<kylie@michaelmeli.com>"
+    }
+  ],
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -26,7 +28,9 @@
   },
   "keywords": [],
   "dependencies": {
-    "vue": "^2.1.10"
+    "vue": "^2.1.10",
+    "vue-resource": "^1.1.2",
+    "vue-router": "^2.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
