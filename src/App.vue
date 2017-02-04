@@ -27,6 +27,9 @@
 </template>
 
 <script>
+  import 'bootstrap-js'
+  import 'bootstrap-css'
+
   import Sidebar from './components/Sidebar'
   import store from './store';
   export default {

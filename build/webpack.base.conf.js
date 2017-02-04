@@ -3,6 +3,7 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var eslintFriendlyFormatter = require('eslint-friendly-formatter')
+const webpack = require('webpack')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -20,7 +21,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', '.css'],
     modules: [
       resolve('src'),
       resolve('node_modules')
@@ -29,7 +30,10 @@ module.exports = {
       'vue$': 'vue/dist/vue.common.js',
       'src': resolve('src'),
       'assets': resolve('src/assets'),
-      'components': resolve('src/components')
+      'components': resolve('src/components'),
+      'jquery': resolve('node_modules/jquery/dist/jquery.min.js'),
+      'bootstrap-js': resolve('node_modules/bootstrap/dist/js/bootstrap.min.js'),
+      'bootstrap-css': resolve('node_modules/bootstrap/dist/css/bootstrap.min.css'),
     }
   },
   module: {
@@ -72,7 +76,7 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
     ]
   }
 }
