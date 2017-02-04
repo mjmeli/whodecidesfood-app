@@ -27,10 +27,10 @@
   },
   "keywords": [],
   "dependencies": {
-    "bootstrap": "^3.3.7",
     "vue": "^2.1.10",
     "vue-resource": "^1.1.2",
-    "vue-router": "^2.2.0"
+    "vue-router": "^2.2.0",
+    "vuex": "^2.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
