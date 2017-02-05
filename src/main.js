@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import Home from './components/Home.vue'
+import Login from './components/Login.vue'
+import Signup from './components/Signup.vue'
 import LogTime from './components/LogTime.vue'
 import TimeEntries from './components/TimeEntries.vue'
 
@@ -11,6 +13,14 @@ import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
+
+import auth from './auth'
+
+// Global Authorization header
+// Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
+
+// Check the users auth status when the app starts
+auth.checkAuth()
 
 const router = new VueRouter({
   routes: [
@@ -24,6 +34,8 @@ const router = new VueRouter({
         }
       ]
     },
+    { path: '/login', component: Login },
+    { path: '/signup', component: Signup },
     // Any invalid route will redirect to home
     { path: '*', redirect: '/home' }
   ],
