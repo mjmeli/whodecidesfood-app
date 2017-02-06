@@ -10,17 +10,34 @@
       </strong>
     </p>
 
+    </br></br>
 
+    <!-- Load component based on authentication -->
+    <!-- <comparisons></comparisons> -->
+    <comparisons v-if="authenticated"></comparisons>
+    <welcome v-else></welcome>
   </div>
 </template>
 
 <script>
   import auth from '../auth'
+  import store from '../store'
+  import Welcome from './Welcome'
+  import SelectComparison from './SelectComparison'
 
   export default {
     data() {
       return {
         testData: ''
+      }
+    },
+    components: {
+      'welcome': Welcome,
+      'comparisons': SelectComparison
+    },
+    computed: {
+      authenticated() {
+        return store.state.authenticated;
       }
     },
     methods: {

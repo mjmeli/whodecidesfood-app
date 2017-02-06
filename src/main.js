@@ -5,6 +5,7 @@ import App from './App'
 import Home from './components/Home.vue'
 import Login from './components/Login.vue'
 import Signup from './components/Signup.vue'
+import Comparison from './components/Comparison.vue'
 import LogTime from './components/LogTime.vue'
 import TimeEntries from './components/TimeEntries.vue'
 
@@ -21,8 +22,14 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
-    { path: '/', component: Home},
-    { path: '/home', component: Home },
+    { path: '/', component: Home,
+      children: [
+        {
+          path: '/comparison/:id',
+          component: Comparison
+        }
+      ]
+    },
     { path: '/time-entries', component: TimeEntries,
       children: [
         {

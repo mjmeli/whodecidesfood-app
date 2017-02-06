@@ -87,4 +87,8 @@ export default {
   getAuthToken() {
     return store.state.auth_token
   },
+
+  isAuthenticated() {
+    return store.state.authenticated
+  }
 }
