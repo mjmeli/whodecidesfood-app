@@ -1,7 +1,12 @@
 <template>
   <div>
     <h2>Comparison {{ $route.params.id }}</h2>
-    <p v-if="comparison">Title: {{ comparison.title }}</p>
+    <div v-if="comparison">
+      <p>Title: {{ comparison.title }}</p>
+      <div v-for="participant in comparison.participants">
+        <p> Participant #{{ participant.id }} {{ participant.name }} (score {{ participant.score }})</p>
+      </div>
+    </div>
   </div>
 </template>
 

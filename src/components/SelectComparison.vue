@@ -2,7 +2,7 @@
   <div>
     <h1>Select Comparison</h1>
 
-    <div class="dropdown">
+    <div class="dropdown btn-group">
       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
         Comparisons <span class="caret"></span>
       </button>
@@ -14,6 +14,9 @@
         </li>
       </ul>
     </div>
+    <router-link to="/" class="btn btn-danger">
+      Back
+    </router-link>
 
     <router-view></router-view>
   </div>
@@ -25,7 +28,7 @@
   export default {
     data() {
       return {
-        comparisons: []
+        comparisons: null
       }
     },
     created: function() {

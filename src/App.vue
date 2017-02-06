@@ -9,7 +9,6 @@
         </a>
         <ul class="nav navbar-nav">
           <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/time-entries">Time Entries</router-link></li>
           <li><router-link to="/login">Login</router-link></li>
           <li><router-link to="/signup">Sign-Up</router-link></li>
           <li><button class="btn btn-primary" v-if="authenticated" @click="logout()">Logout</button></li>
@@ -18,13 +17,8 @@
     </nav>
 
     <!-- Container for content -->
-    <div class="container">
-      <div class="col-sm-3">
-        <sidebar :time="totalTime"></sidebar>
-      </div>
-      <div class="col-sm-9">
+    <div class="container text-center">
         <router-view></router-view>
-      </div>
     </div>
   </div>
 </template>
@@ -35,14 +29,9 @@
 
   import auth from './auth';
   import store from './store';
-  import Sidebar from './components/Sidebar'
 
   export default {
-    components: { 'sidebar': Sidebar },
     computed: {
-      totalTime() {
-        return store.state.totalTime;
-      },
       authenticated() {
         return store.state.authenticated;
       }
