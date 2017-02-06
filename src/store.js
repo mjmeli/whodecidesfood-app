@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 var store = new Vuex.Store({
   state: {
+    auth_token: "",
+    authenticated: false,
     timeEntries: [],
     totalTime: 0,
   },
@@ -17,6 +19,17 @@ var store = new Vuex.Store({
       let index = state.timeEntries.indexOf(timeEntry);
       state.timeEntries.splice(index, 1);
       state.totalTime -= timeEntry.totalTime;
+    },
+    login(state, auth_token) {
+      state.auth_token = auth_token;
+      state.authenticated = true;
+    },
+    signup(state, auth_token) {
+      state.auth_token = auth_token;
+    },
+    logout(state) {
+      state.auth_token = "";
+      state.authenticated = false;
     }
   }
 })

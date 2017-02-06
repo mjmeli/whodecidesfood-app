@@ -20,7 +20,7 @@ import auth from './auth'
 // Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 
 // Check the users auth status when the app starts
-auth.checkAuth()
+// auth.checkAuth()
 
 const router = new VueRouter({
   routes: [

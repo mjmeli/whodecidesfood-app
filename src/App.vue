@@ -12,6 +12,7 @@
           <li><router-link to="/time-entries">Time Entries</router-link></li>
           <li><router-link to="/login">Login</router-link></li>
           <li><router-link to="/signup">Sign-Up</router-link></li>
+          <li><button class="btn btn-primary" v-if="authenticated" @click="logout()">Logout</button></li>
         </ul>
       </div>
     </nav>
@@ -32,13 +33,23 @@
   import 'bootstrap-js'
   import 'bootstrap-css'
 
-  import Sidebar from './components/Sidebar'
+  import auth from './auth';
   import store from './store';
+  import Sidebar from './components/Sidebar'
+
   export default {
     components: { 'sidebar': Sidebar },
     computed: {
       totalTime() {
         return store.state.totalTime;
+      },
+      authenticated() {
+        return store.state.authenticated;
+      }
+    },
+    methods: {
+      logout() {
+        auth.logout(this, '/')
       }
     }
   };
