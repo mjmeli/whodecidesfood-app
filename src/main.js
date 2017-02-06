@@ -14,10 +14,7 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 Vue.use(VueRouter)
 
-import auth from './auth'
-
-// Global Authorization header
-// Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
+// import auth from './auth'
 
 // Check the users auth status when the app starts
 // auth.checkAuth()

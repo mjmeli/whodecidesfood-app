@@ -78,10 +78,13 @@ export default {
 
   // The object to be passed as a header for authenticated requests
   getAuthHeader() {
-    console.log("GETTING AUTH HEADER")
-
     return {
       'Authorization': store.state.auth_token
     }
-  }
+  },
+
+  // Get the auth token
+  getAuthToken() {
+    return store.state.auth_token
+  },
 }
