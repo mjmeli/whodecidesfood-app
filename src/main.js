@@ -50,6 +50,8 @@ const router = new VueRouter({
   // mode: 'history'
 })
 
+var bus = new Vue({})
+
 /* eslint-disable no-new */
 const app = new Vue({
   el: '#app',
