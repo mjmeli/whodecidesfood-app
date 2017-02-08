@@ -7,6 +7,8 @@
         <p> Participant #{{ participant.id }} {{ participant.name }} (score {{ participant.score }})</p>
       </div>
     </div>
+
+    <button type="submit" class="btn btn-danger" @click="deleteComparison()">Delete</button>
   </div>
 </template>
 
@@ -23,6 +25,20 @@
       this.getComparison(this.$route.params.id);
     },
     methods: {
+      deleteComparison() {
+        var id = this.$route.params.id
+        this.$http
+          .delete('http://localhost:3000/api/comparisons/' + id, {
+            headers: auth.getAuthHeader()
+          }).then(
+            function (response) {
+              this.$router.push('/')
+            },
+            function (error) {
+              console.log(error);
+            }
+          )
+      },
       getComparison(id) {
         // Verify user is authenticated before trying to load
         if (!auth.isAuthenticated()) return;
@@ -34,7 +50,6 @@
             headers: auth.getAuthHeader()
           }).then(
             function (response) {
-              // TODO: populate data
               this.comparison = response.body
               console.log(response.body)
             },
