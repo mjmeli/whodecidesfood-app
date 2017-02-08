@@ -90,5 +90,5 @@ export default {
 
   isAuthenticated() {
     return store.state.authenticated
-  }
+  },
 }

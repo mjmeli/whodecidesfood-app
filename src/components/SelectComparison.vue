@@ -88,12 +88,6 @@
         if (string.length > value) return string.substring(0, value) + '...'
         return string
       }
-    },
-    route: {
-      // Check the users auth status before allowing navigation to the route
-      canActivate() {
-        return auth.isAuthenticated()
-      }
     }
   }
 </script>

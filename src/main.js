@@ -16,10 +16,7 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 Vue.use(VueRouter)
 
-// import auth from './auth'
-
-// Check the users auth status when the app starts
-// auth.checkAuth()
+import auth from './auth'
 
 const router = new VueRouter({
   routes: [
@@ -27,11 +24,13 @@ const router = new VueRouter({
       children: [
         {
           path: '/comparison/new',
-          component: CreateComparison
+          component: CreateComparison,
+          beforeEnter: redirectIfNotAuthenticated()
         },
         {
           path: '/comparison/:id',
-          component: Comparison
+          component: Comparison,
+          beforeEnter: redirectIfNotAuthenticated()
         }
       ]
     },
@@ -46,7 +45,7 @@ const router = new VueRouter({
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
     // Any invalid route will redirect to home
-    { path: '*', redirect: '/home' }
+    { path: '*', redirect: '/' }
   ],
   // mode: 'history'
 })
@@ -63,3 +62,14 @@ const app = new Vue({
   template: '<App/>',
   components: { App }
 })
+
+// Returns a function that redirects to login page if not authenticated
+function redirectIfNotAuthenticated() {
+  return (to, from, next) => {
+    if (!auth.isAuthenticated()) {
+      router.push('/login')
+    } else {
+      next()
+    }
+  }
+}

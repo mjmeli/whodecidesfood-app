@@ -44,12 +44,6 @@
           )
       },
     },
-    route: {
-      // Check the users auth status before allowing navigation to the route
-      canActivate() {
-        return auth.isAuthenticated()
-      }
-    },
     watch: {
       '$route.params.id'(newId, oldId) {
         this.getComparison(newId)
