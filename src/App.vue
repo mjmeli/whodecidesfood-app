@@ -28,7 +28,7 @@
   import 'bootstrap-css'
 
   import auth from './auth';
-  import store from './store';
+  import store from './vuex/store';
 
   export default {
     computed: {

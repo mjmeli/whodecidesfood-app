@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import store from '../store'
+  import store from '../vuex/store'
 
   export default {
     data () {

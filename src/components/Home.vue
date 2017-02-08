@@ -21,7 +21,7 @@
 
 <script>
   import auth from '../auth'
-  import store from '../store'
+  import store from '../vuex/store'
   import Welcome from './Welcome'
   import SelectComparison from './SelectComparison'
 

@@ -1,4 +1,4 @@
-import store from '../store'
+import store from '../vuex/store'
 
 // URL and endpoint constants
 const API_URL = 'http://localhost:3000/api/'
