@@ -6,6 +6,7 @@ import Home from './components/Home.vue'
 import Login from './components/Login.vue'
 import Signup from './components/Signup.vue'
 import Comparison from './components/Comparison.vue'
+import CreateComparison from './components/CreateComparison.vue'
 import LogTime from './components/LogTime.vue'
 import TimeEntries from './components/TimeEntries.vue'
 
@@ -24,6 +25,10 @@ const router = new VueRouter({
   routes: [
     { path: '/', component: Home,
       children: [
+        {
+          path: '/comparison/new',
+          component: CreateComparison
+        },
         {
           path: '/comparison/:id',
           component: Comparison
