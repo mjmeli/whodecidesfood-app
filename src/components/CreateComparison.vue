@@ -131,10 +131,8 @@
                 }).then(
                   function (response) {
                     // Success
-                    }
                   },
                   function (error) {
-                    completed++
                     this.error = error_parse.parseErrors(error.body)
                   }
                 )
