@@ -52,7 +52,6 @@
           }).then(
             function (response) {
               this.comparison = response.body
-              console.log(response.body)
             },
             function (error) {
               // If error, redirect to home
