@@ -43,11 +43,6 @@
   import auth from '../auth'
 
   export default {
-    data() {
-      return {
-        comparisons: null,
-      }
-    },
     created: function() {
       this.get()
     },
@@ -57,6 +52,9 @@
       },
       isOnHomePage() {
         return this.$route.params.id != undefined;
+      },
+      comparisons() {
+        return this.$store.getters.comparisons
       }
     },
     methods: {
@@ -70,25 +68,23 @@
         // Verify user is authenticated before trying to load
         if (!auth.isAuthenticated()) return;
 
+        // Clear current comparisons
+        this.$store.dispatch('clearComparisons')
+
         // Get comparisons for this user
-        this.$http
-          .get('http://localhost:3000/api/comparisons', {
-            headers: auth.getAuthHeader()
-          }).then(
-            function (response) {
-              this.comparisons = []
-              response.body.forEach((data) => this.comparisons.push(data))
-            },
-            function (error) {
-              console.log(error);
-            }
-          )
+        this.$store.dispatch('getComparisons', this).then(response => {
+          // Success, do nothing
+        }, error => {
+          // Log error
+          console.log(error);
+        });
       },
+      // Truncate a string with a ... on the end
       truncate(string, value) {
         if (string.length > value) return string.substring(0, value) + '...'
         return string
       }
-    }
+    },
   }
 </script>
 

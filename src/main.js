@@ -17,6 +17,7 @@ Vue.use(VueResource)
 Vue.use(VueRouter)
 
 import auth from './auth'
+import store from './vuex/store'
 
 const router = new VueRouter({
   routes: [
@@ -56,6 +57,7 @@ var bus = new Vue({})
 const app = new Vue({
   el: '#app',
   router,
+  store,
   data: {
     bus: bus
   },

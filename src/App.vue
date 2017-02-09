@@ -28,12 +28,11 @@
   import 'bootstrap-css'
 
   import auth from './auth';
-  import store from './vuex/store';
 
   export default {
     computed: {
       authenticated() {
-        return store.state.authenticated;
+        return this.$store.state.authenticated;
       }
     },
     methods: {

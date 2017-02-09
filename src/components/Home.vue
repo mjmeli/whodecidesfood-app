@@ -21,7 +21,6 @@
 
 <script>
   import auth from '../auth'
-  import store from '../vuex/store'
   import Welcome from './Welcome'
   import SelectComparison from './SelectComparison'
 
@@ -37,7 +36,7 @@
     },
     computed: {
       authenticated() {
-        return store.state.authenticated;
+        return this.$store.state.authenticated;
       }
     },
     methods: {

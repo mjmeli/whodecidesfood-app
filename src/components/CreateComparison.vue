@@ -6,7 +6,7 @@
       <p>{{ error }}</p>
     </div>
 
-    <form class="form-horizontal">
+    <div class="form-horizontal">
       <div class="form-group">
         <label class="control-label col-sm-1" for="title">Title:</label>
         <div class="col-sm-11">
@@ -18,7 +18,7 @@
 
       <div class="form-group">
         <div class="col-sm-offset-1 col-sm-11">
-          <button type="submit" class="btn btn-primary" @click="submit()">Submit</button>
+          <button type="button" class="btn btn-primary" @click="submit()">Submit</button>
           <router-link class="btn btn-danger" to="/">Cancel</router-link>
         </div>
       </div>
@@ -41,25 +41,31 @@
     },
     methods: {
       submit() {
+        // Prepare parameters
         var params = {
           comparison: {
             title: this.comparison.title,
           }
         }
 
-        // this.error = '';
-        // this.$http.post('http://localhost:3000/api/comparisons', params, {
-        //   headers: auth.getAuthHeader()
-        // }).then(
-        //   // Success
-        //   function (response) {
-        //     this.$router.push('/comparison/' + response.body.id)
-        //   },
-        //   // Fail - note errors
-        //   function (error) {
-        //     this.error = error_parse.parseErrors(error.body)
-        //   }
-        // );
+        // Clear error
+        this.error = '';
+
+        // POST
+        // On success, add comparison. On error, display errors.
+        this.$http.post('http://localhost:3000/api/comparisons', params, {
+          headers: auth.getAuthHeader()
+        }).then(
+          // Success
+          function (response) {
+            this.$store.dispatch('addComparison', response.body)
+            this.$router.push('/comparison/' + response.body.id)
+          },
+          // Fail - note errors
+          function (error) {
+            this.error = error_parse.parseErrors(error.body)
+          }
+        );
       }
     },
   }

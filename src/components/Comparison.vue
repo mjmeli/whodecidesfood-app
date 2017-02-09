@@ -32,6 +32,7 @@
             headers: auth.getAuthHeader()
           }).then(
             function (response) {
+              this.$store.dispatch('deleteComparison', this.comparison)
               this.$router.push('/')
             },
             function (error) {
@@ -54,6 +55,8 @@
               console.log(response.body)
             },
             function (error) {
+              // If error, redirect to home
+              this.$router.push('/')
               console.log(error);
             }
           )
