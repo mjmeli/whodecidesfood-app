@@ -5,12 +5,10 @@
       <strong>
         <button class="btn btn-primary" v-on:click="testConnection()">Test Connection</button>
         <div class="quote-area" v-if="testConnection">
-          <h2>Data: {{ testData }}</h2>
+          <h4>{{ testData }}</h4>
         </div>
       </strong>
     </p>
-
-    </br></br>
 
     <!-- Load component based on authentication -->
     <!-- <comparisons></comparisons> -->
