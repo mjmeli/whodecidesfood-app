@@ -114,31 +114,31 @@
         }).then(
           // Success
           function (response) {
-            var comparisonId = response.body.id
-
-            // Dispatch comparison
-            this.$store.dispatch('addComparison', response.body)
-
             // Try to create each of the participants. This is asynchronous.
-            var completed = 0;
-            var filtered = this.comparison.participants.filter((p) => p.name.trim().length > 0)
-            filtered.forEach((p) => {
-              this.$http
-                .post('http://localhost:3000/api/comparisons/' + comparisonId + '/participants', {
-                  name: p.name
-                }, {
-                  headers: auth.getAuthHeader()
-                }).then(
-                  function (response) {
-                    // Success
-                  },
-                  function (error) {
-                    this.error = error_parse.parseErrors(error.body)
-                  }
-                )
+            var comparisonId = response.body.id
+            var filtered = this.comparison.participants.filter(
+              (p) => p.name != undefined && p.name.trim().length > 0
+            )
+            let requests = filtered.map((participant) => {
+              return new Promise((resolve, reject) => {
+                this.addParticipant(participant, comparisonId, resolve, reject)
+              })
             })
 
-            this.$router.push('/comparison/' + comparisonId)
+            // Wait for all participants to be added before redirecting
+            var _this = this;
+            Promise.all(requests).then(function (response) {
+                _this.$store.dispatch('addComparison', response.body)
+                _this.$router.push('/comparison/' + comparisonId)
+              }, function (error) {
+                // On error, delete the created comparison
+                _this.error = "Unable to add participants, please try again"
+                _this.$http
+                  .delete('http://localhost:3000/api/comparisons/' + comparisonId, {
+                    headers: auth.getAuthHeader()
+                  })
+                  .then(null, (error) => console.log(error.body))
+              })
           },
           // Fail - note errors
           function (error) {
@@ -152,6 +152,21 @@
       removeRow: function (index) {
         this.comparison.participants.splice(index, 1);
       },
+      addParticipant: function (participant, comparisonId, success, reject) {
+        this.$http
+          .post('http://localhost:3000/api/comparisons/' + comparisonId + '/participants', {
+            name: participant.name
+          }, {
+            headers: auth.getAuthHeader()
+          }).then(
+            function (response) {
+              success(response)
+            },
+            function (error) {
+              reject(error)
+            }
+          )
+      }
     },
   }
 </script>
