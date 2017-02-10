@@ -34,7 +34,7 @@
                     v-bind:class="{ 'has-error': errors.has('Participant #' + (index + 1), 'participants') }">
                     <input type="text" class="form-control" placeholder="Participant Name"
                             v-model="p.name"
-                            v-validate="'alpha_dash'"
+                            v-validate="'verify_participant|verify_participant_unique'"
                             data-vv-scope="participants"
                             data-vv-as="Participant"
                             :data-vv-name="'Participant #' + (index + 1)"/>
@@ -90,6 +90,25 @@
         },
         error: ''
       }
+    },
+    created() {
+      // Create a custom validator for participants
+      this.$validator.extend('verify_participant', {
+        getMessage: (field) => 'Participants must be left empty or contain at least one non-whitespace character.',
+        validate: (value) => {
+          if (value.length > 0 && value.trim().length == 0) return false
+          return true
+        }
+      });
+      this.$validator.extend('verify_participant_unique', {
+        getMessage: (field) => 'Participants must be unique.',
+        validate: (value) => {
+          if (this.comparison.participants.filter((p) => p.name != undefined)
+                .filter((p) => p.name.trim() == value.trim()).length > 1)
+                return false
+          return true
+        }
+      });
     },
     methods: {
       submit() {
