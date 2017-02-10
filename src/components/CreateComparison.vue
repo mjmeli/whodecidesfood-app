@@ -14,7 +14,7 @@
           <input id="title" class="form-control"
                  placeholder="Enter comparison title"
                  v-model="comparison.title"
-                 v-validate="'required'"
+                 v-validate="'required|max:20'"
                  data-vv-name="Title">
           <p class="text-danger" v-if="errors.has('Title')">{{ errors.first('Title') }}</p>
         </div>
@@ -52,9 +52,10 @@
               </tr>
               <tr>
                 <td>
-                  <button class="btn btn-primary" @click="appendRow()">
+                  <button class="btn btn-primary" @click="appendRow()" v-if="!participantsFull">
                     <span class="glyphicon glyphicon-plus"></span>Add
                   </button>
+                  <p class="text-danger" v-if="participantsFull">Cannot add any more participants</p>
                 </td>
               </tr>
             </tbody>
@@ -111,6 +112,11 @@
           return true
         }
       });
+    },
+    computed: {
+      participantsFull() {
+        return this.comparison.participants.length >= 10
+      }
     },
     methods: {
       submit() {
