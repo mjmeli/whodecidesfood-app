@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Comparison Page</h1>
     <hr>
     <div class="row">
       <div class="col-sm-3">
