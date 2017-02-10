@@ -7,8 +7,6 @@ import Login from './components/Login.vue'
 import Signup from './components/Signup.vue'
 import Comparison from './components/Comparison.vue'
 import CreateComparison from './components/CreateComparison.vue'
-import LogTime from './components/LogTime.vue'
-import TimeEntries from './components/TimeEntries.vue'
 
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
@@ -34,14 +32,6 @@ const router = new VueRouter({
           path: '/comparison/:id',
           component: Comparison,
           beforeEnter: redirectIfNotAuthenticated()
-        }
-      ]
-    },
-    { path: '/time-entries', component: TimeEntries,
-      children: [
-        {
-          path: 'log-time',
-          component: LogTime
         }
       ]
     },
