@@ -5,27 +5,24 @@
     <div class="row">
       <div class="col-sm-3">
         <div id="comparison-side-menu" class="list-group">
-          <router-link class="list-group-item"
+          <router-link class="list-group-item" active-class="active" exact
             v-bind:to="{ path: '/'}"
-            v-bind:class="{ active: isAnyItemActive }"
             v-on:click.native="clearFocus($event)">
               <span class="glyphicon glyphicon-home"></span>
               Home
           </router-link>
 
-          <router-link class="list-group-item"
+          <router-link class="list-group-item" active-class="active" exact
             v-for="comparison in comparisons"
             v-bind:to="{ path: '/comparison/' + comparison.id }"
-            v-bind:class="{ active: activeItem(comparison) }"
             v-on:click.native="clearFocus($event)">
               <span class="glyphicon glyphicon-home invisible"></span>
               {{ truncate(comparison.title, 22) }}
               <span class="glyphicon glyphicon-menu-right"></span>
           </router-link>
 
-          <router-link class="list-group-item"
+          <router-link class="list-group-item" active-class="active" exact
             v-bind:to="{ path: '/comparison/new' }"
-            v-bind:class="{ active: this.$route.path == '/comparison/new' }"
             v-on:click.native="clearFocus($event)">
               <span class="glyphicon glyphicon-plus"></span>
               New
@@ -33,7 +30,10 @@
         </div>
       </div>
       <div class="col-sm-9">
-        <router-view></router-view>
+        <router-view v-if="!isOnHomePage"></router-view>
+        <div v-else>
+          <h3>Select comparison from the menu to the left, or create a new one</h3>
+        </div>
       </div>
     </div>
   </div>
@@ -47,10 +47,10 @@
       this.get()
     },
     computed: {
-      isAnyItemActive() {
+      isOnHomePage() {
         return this.$route.path == '/';
       },
-      isOnHomePage() {
+      isAnyItemActive() {
         return this.$route.params.id != undefined;
       },
       comparisons() {
