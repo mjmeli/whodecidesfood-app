@@ -119,6 +119,7 @@
             var filtered = this.comparison.participants.filter(
               (p) => p.name != undefined && p.name.trim().length > 0
             )
+
             let requests = filtered.map((participant) => {
               return new Promise((resolve, reject) => {
                 this.addParticipant(participant, comparisonId, resolve, reject)
@@ -127,8 +128,9 @@
 
             // Wait for all participants to be added before redirecting
             var _this = this;
+            var comparison = response.body
             Promise.all(requests).then(function (response) {
-                _this.$store.dispatch('addComparison', response.body)
+                _this.$store.dispatch('addComparison', comparison)
                 _this.$router.push('/comparison/' + comparisonId)
               }, function (error) {
                 // On error, delete the created comparison
