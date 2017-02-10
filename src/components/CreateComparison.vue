@@ -92,7 +92,9 @@
       }
     },
     created() {
-      // Create a custom validator for participants
+      // Create a custom validator for participants (remove them first if they exist)
+      this.$validator.remove('verify_participant')
+      this.$validator.remove('verify_participant_unique')
       this.$validator.extend('verify_participant', {
         getMessage: (field) => 'Participants must be left empty or contain at least one non-whitespace character.',
         validate: (value) => {
