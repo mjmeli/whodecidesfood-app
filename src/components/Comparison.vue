@@ -1,14 +1,18 @@
 <template>
   <div>
     <h2>Comparison {{ $route.params.id }}</h2>
-    <div v-if="comparison">
-      <p>Title: {{ comparison.title }}</p>
-      <div v-for="participant in comparison.participants">
+    <div v-if="currentComparison">
+      <p>Title: {{ currentComparison.title }}</p>
+      <div v-for="participant in currentComparison.participants">
         <p> Participant #{{ participant.id }} {{ participant.name }} (score {{ participant.score }})</p>
       </div>
     </div>
 
     <button type="submit" class="btn btn-danger" @click="deleteComparison()">Delete</button>
+
+    <hr>
+
+    <!-- <participant-view></participant-view> -->
   </div>
 </template>
 
@@ -18,11 +22,19 @@
   export default {
     data() {
       return {
-        comparison: null,
+
       }
+    },
+    components: {
+      // 'participant-view': ParticipantView,
     },
     mounted () {
       this.getComparison(this.$route.params.id);
+    },
+    computed: {
+      currentComparison() {
+        return this.$store.getters.currentComparison
+      }
     },
     methods: {
       deleteComparison() {
@@ -45,13 +57,13 @@
         if (!auth.isAuthenticated()) return;
 
         // Get comparisons for this user
-        this.comparison = null
         this.$http
           .get('http://localhost:3000/api/comparisons/' + id, {
             headers: auth.getAuthHeader()
           }).then(
             function (response) {
-              this.comparison = response.body
+              this.$store.dispatch('updateComparison', response.body)
+              this.$store.dispatch('setCurrentComparison', response.body.id)
             },
             function (error) {
               // If error, redirect to home
