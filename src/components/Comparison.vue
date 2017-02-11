@@ -12,12 +12,15 @@
 
     <hr>
 
-    <!-- <participant-view></participant-view> -->
+    <participant-view :currentComparison="currentComparison"></participant-view>
   </div>
 </template>
 
 <script>
   import auth from '../auth'
+
+  // Comparison view components
+  import ParticipantView from './comparison/ParticipantView'
 
   export default {
     data() {
@@ -26,7 +29,7 @@
       }
     },
     components: {
-      // 'participant-view': ParticipantView,
+      'participant-view': ParticipantView,
     },
     mounted () {
       this.getComparison(this.$route.params.id);
