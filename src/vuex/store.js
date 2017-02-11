@@ -9,19 +9,9 @@ var store = new Vuex.Store({
     auth_token: "",
     authenticated: false,
     comparisons: [],
-    timeEntries: [],
-    totalTime: 0,
+    currentComparisonId: -1,
   },
   mutations: {
-    timeUpdate(state,timeEntry) {
-      state.totalTime += timeEntry.totalTime;
-      state.timeEntries.push(timeEntry);
-    },
-    deleteTime(state,timeEntry) {
-      let index = state.timeEntries.indexOf(timeEntry);
-      state.timeEntries.splice(index, 1);
-      state.totalTime -= timeEntry.totalTime;
-    },
     login(state, auth_token) {
       state.auth_token = auth_token;
       state.authenticated = true;
@@ -40,16 +30,35 @@ var store = new Vuex.Store({
       for (var i = 0; i < state.comparisons.length; i++) {
         if (state.comparisons[i].id == comparison.id) {
           state.comparisons.splice(i, 1)
+          if (comparison.id == state.currentComparisonId) {
+            state.currentComparisonId = -1
+          }
           return
         }
       }
     },
     clearComparisons(state) {
       state.comparisons = []
+      state.currentComparisonId = -1
+    },
+    updateComparison(state, comparison) {
+      for (var i = 0; i < state.comparisons.length; i++) {
+        if (state.comparisons[i].id == comparison.id) {
+          state.comparisons.splice(i, 1, comparison)
+        }
+      }
+    },
+    setCurrentComparison(state, comparisonId) {
+      if (state.comparisons.find((p) => p.id == comparisonId) == undefined) {
+        state.currentComparisonId = -1
+      } else {
+        state.currentComparisonId = comparisonId
+      }
     }
   },
   getters: {
-    comparisons: state => state.comparisons
+    comparisons: state => state.comparisons,
+    currentComparison: state => state.comparisons.find((p) => p.id == state.currentComparisonId)
   },
   actions: actions
 })

@@ -13,7 +13,7 @@ const actions = {
   clearComparisons: ({ commit }) => {
     commit('clearComparisons')
   },
-  getComparisons({ commit }, context) {
+  getComparisons: ({ commit }, context) => {
     // Get comparisons for this user
     return new Promise((resolve, reject) => {
       context.$http
@@ -26,6 +26,12 @@ const actions = {
           reject(error)
         })
     })
+  },
+  updateComparison: ({ commit }, comparison) => {
+    commit('updateComparison', comparison)
+  },
+  setCurrentComparison: ({ commit }, comparisonId) => {
+    commit('setCurrentComparison', comparisonId)
   }
 }
 
