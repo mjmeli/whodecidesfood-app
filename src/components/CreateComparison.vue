@@ -107,7 +107,7 @@
         getMessage: (field) => 'Participants must be unique.',
         validate: (value) => {
           if (this.comparison.participants.filter((p) => p.name != undefined)
-                .filter((p) => p.name.trim() == value.trim()).length > 1)
+                .filter((p) => p.name.trim().toLowerCase() == value.trim().toLowerCase()).length > 1)
                 return false
           return true
         }
