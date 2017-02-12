@@ -6,7 +6,7 @@
         <span class="glyphicon glyphicon-plus"></span>
       </a>
     </div>
-    <ul class="list-group">
+    <ul id="participant-name-list" class="list-group">
       <li class="list-group-item" v-for="(participant, i) in currentComparison.participants">
         <span class="participant-name">{{ participant.name }}</span>
         <div class="participant-view-buttons">
@@ -104,6 +104,8 @@
             headers: auth.getAuthHeader()
           }).then(
             function (response) {
+              // Manually remove the row because vue doesn't detect the deletion
+              $('#participant-name-list li').eq(index).remove()
               this.$store.dispatch('deleteParticipantFromComparison', [cid, pid])
             },
             function (error) {
