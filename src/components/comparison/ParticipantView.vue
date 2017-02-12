@@ -52,7 +52,8 @@
     data() {
       return {
         addingParticipant: false,
-        name: ''
+        name: '',
+        error: '',
       }
     },
     computed: {
@@ -70,13 +71,45 @@
       },
       addParticipant() {
         if (this.errors.any()) return;
-        console.log("add " + this.name)
+
+        this.error = '';
+        var comparisonId = this.currentComparison.id
+        var params = {
+          participant: {
+            name: this.name
+          }
+        }
+        this.$http
+          .post('http://localhost:3000/api/comparisons/' + comparisonId + '/participants',
+          params, { headers: auth.getAuthHeader() }).then(
+            // Success - update the current comparison
+            function (response) {
+              this.$store.dispatch('addParticipantToComparison', [comparisonId, response.body])
+              this.removeRow()
+            },
+            // Fail - note errors
+            function (error) {
+              this.error = error_parse.parseErrors(error.body)
+            }
+        );
       },
       editParticipant(index) {
         console.log("edit " + index)
       },
       deleteParticipant(index) {
-        console.log("delete " + index)
+        var cid = this.currentComparison.id
+        var pid = this.currentComparison.participants[index].id
+        this.$http
+          .delete('http://localhost:3000/api/comparisons/' + cid + '/participants/' + pid, {
+            headers: auth.getAuthHeader()
+          }).then(
+            function (response) {
+              this.$store.dispatch('deleteParticipantFromComparison', [cid, pid])
+            },
+            function (error) {
+              console.log(error);
+            }
+          )
       }
     },
     created() {
@@ -86,7 +119,6 @@
       this.$validator.extend('verify_participant', {
         getMessage: (field) => 'Participants must contain at least one non-whitespace character.',
         validate: (value) => {
-          console.log(value == undefined)
           if (value.trim().length == 0) return false
           return true
         }

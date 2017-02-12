@@ -7,8 +7,8 @@ const actions = {
       resolve(true)
     })
   },
-  deleteComparison: ({ commit }, comparison) => {
-    commit('deleteComparison', comparison)
+  deleteComparison: ({ commit }, comparisonId) => {
+    commit('deleteComparison', comparisonId)
   },
   clearComparisons: ({ commit }) => {
     commit('clearComparisons')
@@ -32,7 +32,13 @@ const actions = {
   },
   setCurrentComparison: ({ commit }, comparisonId) => {
     commit('setCurrentComparison', comparisonId)
-  }
+  },
+  addParticipantToComparison: ({ commit }, data) => {
+    commit('addParticipantToComparison', data)
+  },
+  deleteParticipantFromComparison: ({ commit }, data) => {
+    commit('deleteParticipantFromComparison', data)
+  },
 }
 
 export default actions

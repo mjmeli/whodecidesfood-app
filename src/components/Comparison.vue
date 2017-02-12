@@ -47,7 +47,7 @@
             headers: auth.getAuthHeader()
           }).then(
             function (response) {
-              this.$store.dispatch('deleteComparison', this.comparison)
+              this.$store.dispatch('deleteComparison', id)
               this.$router.push('/')
             },
             function (error) {

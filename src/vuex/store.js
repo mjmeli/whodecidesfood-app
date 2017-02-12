@@ -26,11 +26,11 @@ var store = new Vuex.Store({
     addComparison(state, comparison) {
       state.comparisons.push(comparison)
     },
-    deleteComparison(state, comparison) {
+    deleteComparison(state, comparisonId) {
       for (var i = 0; i < state.comparisons.length; i++) {
-        if (state.comparisons[i].id == comparison.id) {
+        if (state.comparisons[i].id == comparisonId) {
           state.comparisons.splice(i, 1)
-          if (comparison.id == state.currentComparisonId) {
+          if (comparisonId == state.currentComparisonId) {
             state.currentComparisonId = -1
           }
           return
@@ -53,6 +53,28 @@ var store = new Vuex.Store({
         state.currentComparisonId = -1
       } else {
         state.currentComparisonId = comparisonId
+      }
+    },
+    addParticipantToComparison(state, data) {
+      var comparisonId = data[0], participant = data[1]
+      for (var i = 0; i < state.comparisons.length; i++) {
+        if (state.comparisons[i].id == comparisonId) {
+          state.comparisons[i].participants.push(participant)
+          return
+        }
+      }
+    },
+    deleteParticipantFromComparison(state, data) {
+      var comparisonId = data[0], participantId = data[1]
+      for (var i = 0; i < state.comparisons.length; i++) {
+        if (state.comparisons[i].id == comparisonId) {
+          for (var j = 0; j < state.comparisons[i].participants.length; j++) {
+            if (state.comparisons[i].participants[j].id == participantId) {
+              state.comparisons[i].participants.splice(j, 1)
+              return
+            }
+          }
+        }
       }
     }
   },
