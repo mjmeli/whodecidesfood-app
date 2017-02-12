@@ -77,6 +77,7 @@
 </template>
 
 <script>
+  import api from '../api'
   import auth from '../auth'
   import error_parse from '../error_parse'
 
@@ -123,12 +124,8 @@
         // Don't proceed if errors
         if (this.errors.any() || this.errors.any('participants')) return
 
-        // Prepare parameters
-        var params = {
-          comparison: {
-            title: this.comparison.title.trim(),
-          }
-        }
+        // Check authentication
+        if (!auth.isAuthenticated()) return;
 
         // Clear error
         this.error = '';
@@ -136,65 +133,39 @@
         // Create the comparison
         // On success, attempt to add participants (if included)
         // On error, update error test
-        this.$http.post('http://localhost:3000/api/comparisons', params, {
-          headers: auth.getAuthHeader()
-        }).then(
-          // Success
-          function (response) {
+        var _this = this
+        api.comparisons.create(this, this.comparison.title.trim()).then(
+          function success(comparison) {
             // Try to create each of the participants. This is asynchronous.
-            var comparisonId = response.body.id
-            var filtered = this.comparison.participants.filter(
+            var filtered = _this.comparison.participants.filter(
               (p) => p.name != undefined && p.name.trim().length > 0
             )
-
             let requests = filtered.map((participant) => {
               return new Promise((resolve, reject) => {
-                this.addParticipant(participant, comparisonId, resolve, reject)
+                api.participants.create(_this, comparison.id, participant.name,)
+                  .then((response) => resolve(response), (error) => reject(error))
               })
             })
 
             // Wait for all participants to be added before redirecting
-            var _this = this;
-            var comparison = response.body
             Promise.all(requests).then(function (response) {
                 _this.$store.dispatch('addComparison', comparison)
-                _this.$router.push('/comparison/' + comparisonId)
+                _this.$router.push('/comparison/' + comparison.id)
               }, function (error) {
                 // On error, delete the created comparison
                 _this.error = "Unable to add participants, please try again"
-                _this.$http
-                  .delete('http://localhost:3000/api/comparisons/' + comparisonId, {
-                    headers: auth.getAuthHeader()
-                  })
-                  .then(null, (error) => console.log(error.body))
+                api.comparisons.delete(_this, comparison.id).then(null, (error) => console.log(error))
               })
           },
-          // Fail - note errors
-          function (error) {
+          function error(error) {
             this.error = error_parse.parseErrors(error.body)
-          }
-        );
+          });
       },
       appendRow: function () {
         this.comparison.participants.push({})
       },
       removeRow: function (index) {
         this.comparison.participants.splice(index, 1);
-      },
-      addParticipant: function (participant, comparisonId, success, reject) {
-        this.$http
-          .post('http://localhost:3000/api/comparisons/' + comparisonId + '/participants', {
-            name: participant.name
-          }, {
-            headers: auth.getAuthHeader()
-          }).then(
-            function (response) {
-              success(response)
-            },
-            function (error) {
-              reject(error)
-            }
-          )
       }
     },
   }

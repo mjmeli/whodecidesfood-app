@@ -45,6 +45,7 @@
 </template>
 
 <script>
+  import api from '../../api'
   import auth from '../../auth'
 
   export default {
@@ -70,48 +71,34 @@
         this.addingParticipant = false
       },
       addParticipant() {
-        if (this.errors.any()) return;
-
+        // Don't proceed if errors
+        if (this.errors.any()) return
         this.error = '';
-        var comparisonId = this.currentComparison.id
-        var params = {
-          participant: {
-            name: this.name
-          }
-        }
-        this.$http
-          .post('http://localhost:3000/api/comparisons/' + comparisonId + '/participants',
-          params, { headers: auth.getAuthHeader() }).then(
-            // Success - update the current comparison
-            function (response) {
-              this.$store.dispatch('addParticipantToComparison', [comparisonId, response.body])
-              this.removeRow()
-            },
-            // Fail - note errors
-            function (error) {
-              this.error = error_parse.parseErrors(error.body)
-            }
-        );
+
+        // Check authentication
+        if (!auth.isAuthenticated()) return;
+
+        // Create the participant and add it to the state
+        api.participants.create(this, this.currentComparison.id, this.name).then((participant) => {
+          this.$store.dispatch('addParticipantToComparison', [this.currentComparison.id, participant])
+          this.removeRow()
+        }, (error) => this.error = error_parse.parseErrors(error.body))
       },
       editParticipant(index) {
         console.log("edit " + index)
       },
       deleteParticipant(index) {
+        // Check authentication
+        if (!auth.isAuthenticated()) return;
+
+        // Delete the participant
         var cid = this.currentComparison.id
         var pid = this.currentComparison.participants[index].id
-        this.$http
-          .delete('http://localhost:3000/api/comparisons/' + cid + '/participants/' + pid, {
-            headers: auth.getAuthHeader()
-          }).then(
-            function (response) {
-              // Manually remove the row because vue doesn't detect the deletion
-              $('#participant-name-list li').eq(index).remove()
-              this.$store.dispatch('deleteParticipantFromComparison', [cid, pid])
-            },
-            function (error) {
-              console.log(error);
-            }
-          )
+        api.participants.delete(this, cid, pid).then(() => {
+          // Manually remove the row because vue doesn't detect the deletion
+          $('#participant-name-list li').eq(index).remove()
+          this.$store.dispatch('deleteParticipantFromComparison', [cid, pid])
+        }, (error) => console.log(error))
       }
     },
     created() {

@@ -17,17 +17,13 @@
 </template>
 
 <script>
+  import api from '../api'
   import auth from '../auth'
 
   // Comparison view components
   import ParticipantView from './comparison/ParticipantView'
 
   export default {
-    data() {
-      return {
-
-      }
-    },
     components: {
       'participant-view': ParticipantView,
     },
@@ -41,39 +37,31 @@
     },
     methods: {
       deleteComparison() {
+        // Verify user is authenticated before trying to delete
+        if (!auth.isAuthenticated()) return;
+
+        // Perform the deletion, redirect to home if successful
         var id = this.$route.params.id
-        this.$http
-          .delete('http://localhost:3000/api/comparisons/' + id, {
-            headers: auth.getAuthHeader()
-          }).then(
-            function (response) {
-              this.$store.dispatch('deleteComparison', id)
-              this.$router.push('/')
-            },
-            function (error) {
-              console.log(error);
-            }
-          )
+        api.comparisons.delete(this, id).then(() => {
+          this.$store.dispatch('deleteComparison', id)
+          this.$router.push('/')
+        }, (error) => {
+          console.log(error);
+        });
       },
       getComparison(id) {
         // Verify user is authenticated before trying to load
         if (!auth.isAuthenticated()) return;
 
-        // Get comparisons for this user
-        this.$http
-          .get('http://localhost:3000/api/comparisons/' + id, {
-            headers: auth.getAuthHeader()
-          }).then(
-            function (response) {
-              this.$store.dispatch('updateComparison', response.body)
-              this.$store.dispatch('setCurrentComparison', response.body.id)
-            },
-            function (error) {
-              // If error, redirect to home
-              this.$router.push('/')
-              console.log(error);
-            }
-          )
+        // Get the selected comparison and update the state
+        api.comparisons.get(this, id).then((comparison) => {
+          this.$store.dispatch('updateComparison', comparison)
+          this.$store.dispatch('setCurrentComparison', comparison.id)
+        }, (error) => {
+          // If error, redirect to home
+          this.$router.push('/')
+          console.log(error);
+        });
       },
     },
     watch: {

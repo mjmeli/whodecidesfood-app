@@ -39,6 +39,7 @@
 </template>
 
 <script>
+  import api from '../api'
   import auth from '../auth'
 
   export default {
@@ -71,12 +72,11 @@
         this.$store.dispatch('clearComparisons')
 
         // Get comparisons for this user
-        this.$store.dispatch('getComparisons', this).then(response => {
-          // Success, do nothing
-        }, error => {
-          // Log error
-          console.log(error);
-        });
+        api.comparisons.index(this).then((comparisons) => {
+          comparisons.forEach((c) => this.$store.dispatch('addComparison', c))
+        }, (error) => {
+          console.log(error)
+        })
       },
       // Truncate a string with a ... on the end
       truncate(string, value) {
