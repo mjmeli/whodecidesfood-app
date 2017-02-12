@@ -27,7 +27,7 @@
     components: {
       'participant-view': ParticipantView,
     },
-    mounted () {
+    created () {
       this.getComparison(this.$route.params.id);
     },
     computed: {
@@ -52,6 +52,8 @@
       getComparison(id) {
         // Verify user is authenticated before trying to load
         if (!auth.isAuthenticated()) return;
+
+        console.log("getting")
 
         // Get the selected comparison and update the state
         api.comparisons.get(this, id).then((comparison) => {
