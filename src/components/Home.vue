@@ -4,8 +4,11 @@
     <p>
       <strong>
         <button class="btn btn-primary" v-on:click="testConnection()">Test Connection</button>
-        <div class="quote-area" v-if="testConnection">
-          <h4>{{ testData }}</h4>
+        <div class="quote-area" v-if="testData.message.length > 0">
+          <h4>
+            {{ testData.message }} <br/>
+            Authenticated = {{ testData.authenticated }}
+          </h4>
         </div>
       </strong>
     </p>
@@ -25,7 +28,10 @@
   export default {
     data() {
       return {
-        testData: ''
+        testData: {
+          message: '',
+          authenticated: false,
+        }
       }
     },
     components: {
@@ -43,7 +49,7 @@
           .get('http://localhost:3000/api/test', {
             headers: auth.getAuthHeader()
           })
-          .then((data) => this.testData = data.body.quote, (data) => console.log(data))
+          .then((data) => this.testData = data.body, (data) => console.log(data))
       }
     }
   };
