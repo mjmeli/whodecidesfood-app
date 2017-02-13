@@ -52,9 +52,7 @@
       getComparison(id) {
         // Verify user is authenticated before trying to load
         if (!auth.isAuthenticated()) return;
-
-        console.log("getting")
-
+        
         // Get the selected comparison and update the state
         api.comparisons.get(this, id).then((comparison) => {
           this.$store.dispatch('updateComparison', comparison)

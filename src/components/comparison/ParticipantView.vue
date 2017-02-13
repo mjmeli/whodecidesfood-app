@@ -7,7 +7,8 @@
       </a>
     </div>
     <ul id="participant-name-list" class="list-group">
-      <li class="list-group-item" v-for="(participant, i) in currentComparison.participants">
+      <li :id="'participant-view-' + participant.id" class="list-group-item"
+          v-for="(participant, i) in currentComparison.participants">
         <span class="participant-name">{{ participant.name }}</span>
         <div class="participant-view-buttons">
           <button type="button" class="btn btn-default" @click="editParticipant(i)">
@@ -95,8 +96,8 @@
         var cid = this.currentComparison.id
         var pid = this.currentComparison.participants[index].id
         api.participants.delete(this, cid, pid).then(() => {
-          // Manually remove the row because vue doesn't detect the deletion
-          $('#participant-name-list li').eq(index).remove()
+          // Manually hide the row because vue doesn't detect the deletion
+          $('#participant-view-' + pid).hide()
           this.$store.dispatch('deleteParticipantFromComparison', [cid, pid])
         }, (error) => console.log(error))
       }
