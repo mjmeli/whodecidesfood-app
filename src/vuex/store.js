@@ -44,8 +44,13 @@ var store = new Vuex.Store({
     updateComparison(state, comparison) {
       var oldComparison = state.comparisons.find((c) => c.id == comparison.id)
       if (oldComparison != undefined) {
+        // we have to replace each field individually as otherwise the
+        // state model doesn't work for some reason...why? idk!
         var oldComparisonIndex = state.comparisons.indexOf(oldComparison)
-        state.comparisons[oldComparisonIndex] = comparison
+        state.comparisons[oldComparisonIndex].participants = comparison.participants
+        state.comparisons[oldComparisonIndex].title = comparison.title
+        state.comparisons[oldComparisonIndex].decision_ids = comparison.decision_ids
+        state.comparisons[oldComparisonIndex].owner = comparison.owner
       }
     },
     setCurrentComparison(state, comparisonId) {

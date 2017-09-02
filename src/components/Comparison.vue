@@ -1,16 +1,12 @@
 <template>
   <div>
-    <h2>Comparison {{ $route.params.id }}</h2>
-    <div v-if="currentComparison">
-      <p>Title: {{ currentComparison.title }}</p>
-      <div v-for="participant in currentComparison.participants">
-        <p> Participant #{{ participant.id }} {{ participant.name }} (score {{ participant.score }})</p>
-      </div>
-    </div>
+    <h2>{{ currentComparison.title }}</h2>
 
     <button type="submit" class="btn btn-danger" @click="deleteComparison()">Delete</button>
 
     <hr>
+
+    <scoreboard-view :currentComparison="currentComparison"></scoreboard-view>
 
     <participant-view :currentComparison="currentComparison"></participant-view>
   </div>
@@ -22,10 +18,12 @@
 
   // Comparison view components
   import ParticipantView from './comparison/ParticipantView'
+  import ScoreboardView from './comparison/ScoreboardView'
 
   export default {
     components: {
       'participant-view': ParticipantView,
+      'scoreboard-view': ScoreboardView,
     },
     created () {
       this.getComparison(this.$route.params.id);
@@ -52,7 +50,7 @@
       getComparison(id) {
         // Verify user is authenticated before trying to load
         if (!auth.isAuthenticated()) return;
-        
+
         // Get the selected comparison and update the state
         api.comparisons.get(this, id).then((comparison) => {
           this.$store.dispatch('updateComparison', comparison)
