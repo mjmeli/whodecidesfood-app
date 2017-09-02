@@ -54,11 +54,7 @@ var store = new Vuex.Store({
       }
     },
     setCurrentComparison(state, comparisonId) {
-      if (state.comparisons.find((p) => p.id == comparisonId) == undefined) {
-        state.currentComparisonId = -1
-      } else {
-        state.currentComparisonId = comparisonId
-      }
+      state.currentComparisonId = comparisonId
     },
     addParticipantToComparison(state, data) {
       var comparisonId = data[0], participant = data[1]
