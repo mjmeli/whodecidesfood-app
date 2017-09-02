@@ -1,5 +1,7 @@
 export default {
   parseErrors(errors) {
+    if (errors == undefined) return;
+    
     var re = ""
     errors = errors.errors
 

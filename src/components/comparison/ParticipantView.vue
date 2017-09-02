@@ -7,17 +7,47 @@
       </a>
     </div>
     <ul id="participant-name-list" class="list-group">
+
       <li :id="'participant-view-' + participant.id" class="list-group-item"
           v-for="(participant, i) in currentComparison.participants">
-        <span class="participant-name">{{ participant.name }}</span>
-        <div class="participant-view-buttons">
-          <button type="button" class="btn btn-default" @click="editParticipant(i)">
-            <span class="glyphicon glyphicon-pencil"></span>
-          </button>
-          <button type="button" class="btn btn-danger" @click="deleteParticipant(i)">
-            <span class="glyphicon glyphicon-remove"></span>
-          </button>
+
+        <!-- show name and delete button if not editing -->
+        <div v-if="!editingParticipant || editingParticipantIndex != i">
+          <span class="participant-name">
+            {{ participant.name }}
+          </span>
+
+          <div class="participant-view-buttons">
+            <button type="button" class="btn btn-default" @click="addEditParticipantRow(i)">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+            <button type="button" class="btn btn-danger" @click="deleteParticipant(i)">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+          </div>
         </div>
+
+        <!-- show editing box and save/cancel button if editing  -->
+        <div v-if="editingParticipant && editingParticipantIndex == i">
+          <div v-bind:class="{ 'has-error': errors.has('Name') }">
+            <div class="participant-view-buttons">
+              <button type="button" class="btn btn-success" @click="editParticipant(i)" :disabled="errors.has('Name')">
+                <span class="glyphicon glyphicon-ok"></span>
+              </button>
+              <button type="button" class="btn btn-warning" @click="removeEditParticipantRow()">
+                <span class="glyphicon glyphicon-repeat"></span>
+              </button>
+            </div>
+            <div class="participant-view-input">
+              <input class="form-control"
+                     v-model="name"
+                     v-validate="'required|verify_participant|verify_participant_unique'"
+                     data-vv-name="Name">
+              <p class="text-danger" v-if="errors.has('Name')">{{ errors.first('Name') }}</p>
+            </div>
+          </div>
+        </div>
+
       </li>
 
       <li class="list-group-item participant-list-group-item-input"
@@ -32,7 +62,7 @@
             </button>
           </div>
           <div class="participant-view-input">
-            <input id="title" class="form-control"
+            <input class="form-control"
                    placeholder="Enter participant name"
                    v-model="name"
                    v-validate="'required|verify_participant|verify_participant_unique'"
@@ -48,12 +78,15 @@
 <script>
   import api from '../../api'
   import auth from '../../auth'
+  import error_parse from '../../error_parse'
 
   export default {
     props: ['currentComparison'],
     data() {
       return {
         addingParticipant: false,
+        editingParticipant: false,
+        editingParticipantIndex: 0,
         name: '',
         error: '',
       }
@@ -61,15 +94,37 @@
     computed: {
       canAddParticipant() {
         return this.currentComparison.participants.length < 20
+      },
+    },
+    watch: {
+      // clear booleans on comparison change
+      currentComparison: function() {
+        this.name = '';
+        this.addingParticipant = false;
+        this.editingParticipant = false;
       }
     },
     methods: {
       addRow() {
-        this.addingParticipant = true
+        this.name = '';
+        this.editingParticipant = false;
+        this.addingParticipant = true;
       },
       removeRow() {
-        this.name = ''
-        this.addingParticipant = false
+        this.name = '';
+        this.addingParticipant = false;
+        this.editingParticipant = false;
+      },
+      addEditParticipantRow(index) {
+        this.name = this.currentComparison.participants[index].name;
+        this.editingParticipantIndex = index;
+        this.editingParticipant = true;
+        this.addingParticipant = false;
+      },
+      removeEditParticipantRow(index) {
+        this.name = '';
+        this.editingParticipant = false;
+        this.addingParticipant = false;
       },
       addParticipant() {
         // Don't proceed if errors
@@ -80,13 +135,27 @@
         if (!auth.isAuthenticated()) return;
 
         // Create the participant and add it to the state
-        api.participants.create(this, this.currentComparison.id, this.name).then((participant) => {
-          this.$store.dispatch('addParticipantToComparison', [this.currentComparison.id, participant])
-          this.removeRow()
-        }, (error) => this.error = error_parse.parseErrors(error.body))
+        api.participants.create(this, this.currentComparison.id, this.name)
+          .then((participant) => {
+            this.$store.dispatch('addParticipantToComparison', [this.currentComparison.id, participant])
+            this.removeRow()
+          }, (error) => this.error = error_parse.parseErrors(error.body))
       },
       editParticipant(index) {
-        console.log("edit " + index)
+        // Don't proceed if errors
+        if (this.errors.any()) return
+        this.error = '';
+
+        // Check authentication
+        if (!auth.isAuthenticated()) return;
+
+        // Edit the participant and modify it in the state
+        api.participants
+          .update(this, this.currentComparison.id, this.currentComparison.participants[index].id, this.name)
+            .then((participant) => {
+              this.$store.dispatch('updateParticipantNameInComparison', [this.currentComparison.id, participant.id, participant.name])
+              this.removeEditParticipantRow(index)
+            }, (error) => this.error = error_parse.parseErrors(error.body))
       },
       deleteParticipant(index) {
         // Check authentication
@@ -99,7 +168,7 @@
           // Manually hide the row because vue doesn't detect the deletion
           $('#participant-view-' + pid).hide()
           this.$store.dispatch('deleteParticipantFromComparison', [cid, pid])
-        }, (error) => console.log(error))
+        }, (error) => this.error = error_parse.parseErrors(error.body))
       }
     },
     created() {
@@ -116,13 +185,28 @@
       this.$validator.extend('verify_participant_unique', {
         getMessage: (field) => 'Participants must be unique.',
         validate: (value) => {
-          if (this.currentComparison.participants.filter((p) => p.name != undefined)
-                .filter((p) => p.name.trim().toLowerCase() == value.trim().toLowerCase()).length > 0)
-                return false
+          // If editing, we should not give an error if they type in the same
+          // name as already exists.
+          if (this.editingParticipant) {
+            var currentName = this.currentComparison.participants[this.editingParticipantIndex].name
+            if (value.trim().toLowerCase() == currentName.trim().toLowerCase()) {
+              return true;
+            }
+          }
+
+          // Otherwise fail on any match
+          if (this.currentComparison.participants
+                .filter((p) => p.name != undefined)
+                .filter((p) => p.name.trim().toLowerCase() == value.trim().toLowerCase())
+                .length > 0)
+          {
+            return false
+          }
+
           return true
         }
       });
-    },
+    }
   }
 </script>
 

@@ -22,6 +22,9 @@ const actions = {
   deleteParticipantFromComparison: ({ commit }, data) => {
     commit('deleteParticipantFromComparison', data)
   },
+  updateParticipantNameInComparison: ({ commit }, data) => {
+    commit('updateParticipantNameInComparison', data)
+  }
 }
 
 export default actions

@@ -53,6 +53,23 @@ export default {
         })
     })
   },
+  // Update a participant
+  // Returns a promise; success with the created object, error with error
+  update(context, comparisonId, id, name) {
+    var params = {
+      participant: {
+        'name': name.trim()
+      }
+    }
+    return new Promise((resolve, reject) => {
+      context.$http
+        .patch(getEndPointURL(comparisonId) + id, params, shared.getAuthHeader()).then(response => {
+          resolve(response.body)
+        }, error => {
+          reject(error)
+        })
+    })
+  },
   // Delete a participant by ID
   // Returns a promise; success with raw response, error with error
   delete(context, comparisonId, id) {

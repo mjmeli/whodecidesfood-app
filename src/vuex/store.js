@@ -66,6 +66,12 @@ var store = new Vuex.Store({
       var participant = comparison.participants.find((p) => p.id == participantId)
       var participantIndex = comparison.participants.indexOf(participant)
       comparison.participants.splice(participantIndex, 1)
+    },
+    updateParticipantNameInComparison(state, data) {
+      var comparisonId = data[0], participantId = data[1], newName = data[2]
+      var comparison = state.comparisons.find((c) => c.id == comparisonId)
+      var participant = comparison.participants.find((p) => p.id == participantId)
+      participant.name = newName.trim()
     }
   },
   getters: {
