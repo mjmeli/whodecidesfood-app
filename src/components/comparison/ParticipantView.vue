@@ -151,7 +151,7 @@
 
         // Edit the participant and modify it in the state
         api.participants
-          .update(this, this.currentComparison.id, this.currentComparison.participants[index].id, this.name)
+          .update(this, this.currentComparison.id, this.currentComparison.participants[index].id, this.name.trim())
             .then((participant) => {
               this.$store.dispatch('updateParticipantNameInComparison', [this.currentComparison.id, participant.id, participant.name])
               this.removeEditParticipantRow(index)

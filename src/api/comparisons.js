@@ -48,6 +48,23 @@ export default {
         })
     })
   },
+  // Update a comparison
+  // Returns a promise; success with the created object, error with error
+  update(context, id, title) {
+    var params = {
+      comparison: {
+        'title': title.trim()
+      }
+    }
+    return new Promise((resolve, reject) => {
+      context.$http
+        .patch(ENDPOINT + id, params, shared.getAuthHeader()).then(response => {
+          resolve(response.body)
+        }, error => {
+          reject(error)
+        })
+    })
+  },
   // Delete a comparison by ID
   // Returns a promise; success with raw response, error with error
   delete(context, id) {
