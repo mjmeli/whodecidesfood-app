@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{ currentComparison.title }}</h2>
+    <h2 v-if="currentComparison">{{ currentComparison.title }}</h2>
 
     <button type="submit" class="btn btn-danger" @click="deleteComparison()">Delete</button>
 
