@@ -7,8 +7,10 @@
 import store from '../vuex/store'
 import Comparisons from './comparisons'
 import Participants from './participants'
+import Decisions from './decisions'
 
 export default {
   comparisons: Comparisons,
-  participants: Participants
+  participants: Participants,
+  decisions: Decisions
 }

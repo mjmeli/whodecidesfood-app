@@ -128,6 +128,7 @@
       },
       addParticipant() {
         // Don't proceed if errors
+        this.$validator.validateAll()
         if (this.errors.any()) return
         this.error = '';
 
@@ -143,6 +144,7 @@
       },
       editParticipant(index) {
         // Don't proceed if errors
+        this.$validator.validateAll()
         if (this.errors.any()) return
         this.error = '';
 

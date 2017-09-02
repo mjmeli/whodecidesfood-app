@@ -54,7 +54,7 @@
       return {
         name: '',
         error: '',
-        editingComparison: true,
+        editingComparison: false,
       }
     },
     watch: {

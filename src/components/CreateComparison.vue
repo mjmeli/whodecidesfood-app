@@ -122,6 +122,7 @@
     methods: {
       submit() {
         // Don't proceed if errors
+        this.$validator.validateAll()
         if (this.errors.any() || this.errors.any('participants')) return
 
         // Check authentication

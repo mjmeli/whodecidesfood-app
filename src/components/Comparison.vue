@@ -1,7 +1,8 @@
 <template>
   <div>
-    
+
     <meta-view :currentComparison="currentComparison"></meta-view>
+    <decision-view :currentComparison="currentComparison"></decision-view>
     <scoreboard-view :currentComparison="currentComparison"></scoreboard-view>
     <participant-view :currentComparison="currentComparison"></participant-view>
 
@@ -14,12 +15,14 @@
 
   // Comparison view components
   import MetaView from './comparison/MetaView'
+  import DecisionView from './comparison/DecisionView'
   import ScoreboardView from './comparison/ScoreboardView'
   import ParticipantView from './comparison/ParticipantView'
 
   export default {
     components: {
       'meta-view': MetaView,
+      'decision-view': DecisionView,
       'scoreboard-view': ScoreboardView,
       'participant-view': ParticipantView,
     },
