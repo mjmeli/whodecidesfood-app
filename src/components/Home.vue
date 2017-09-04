@@ -1,20 +1,6 @@
 <template>
   <div>
-    <h1>Who Decides Food</h1>
-    <p>
-      <strong>
-        <button class="btn btn-primary" v-on:click="testConnection()">Test Connection</button>
-        <div class="quote-area" v-if="testData.message.length > 0">
-          <h4>
-            {{ testData.message }} <br/>
-            Authenticated = {{ testData.authenticated }}
-          </h4>
-        </div>
-      </strong>
-    </p>
-
     <!-- Load component based on authentication -->
-    <!-- <comparisons></comparisons> -->
     <comparisons v-if="authenticated"></comparisons>
     <welcome v-else></welcome>
   </div>

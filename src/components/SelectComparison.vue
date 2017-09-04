@@ -1,6 +1,5 @@
 <template>
   <div>
-    <hr>
     <div class="row">
       <div class="col-sm-3">
         <div id="comparison-side-menu" class="list-group">
