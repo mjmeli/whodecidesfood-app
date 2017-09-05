@@ -16,7 +16,7 @@
           </span>
 
           <div class="scoreboard-view-score">
-            {{ participant.score }}
+            <p class="participant-score">{{ participant.score }}</p>
           </div>
       </li>
     </ul>
@@ -44,6 +44,12 @@
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+#scoreboard-view .participant-score {
+  font-size: 24px;
+  margin-top: 1px;
+  margin-bottom: 7px;
 }
 
 </style>

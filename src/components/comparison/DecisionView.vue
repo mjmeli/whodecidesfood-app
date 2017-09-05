@@ -2,7 +2,7 @@
   <div id="decision-view" class="panel panel-default" v-if="currentComparison">
 
     <div class="panel-heading">
-      Decisions
+      Add New Decision
     </div>
 
     <ul class="list-group">

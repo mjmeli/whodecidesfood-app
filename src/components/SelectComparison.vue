@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="main-view" class="container-fluid">
     <div class="row">
       <div class="col-sm-3">
         <div id="comparison-side-menu" class="list-group">
@@ -29,8 +29,8 @@
       </div>
       <div class="col-sm-9">
         <router-view v-if="!isOnHomePage"></router-view>
-        <div v-else>
-          <h3>Select comparison from the menu to the left, or create a new one</h3>
+        <div v-else class="text-center">
+          <h3>Select an existing comparison from the menu to the left, or create a new one.</h3>
         </div>
       </div>
     </div>
@@ -87,6 +87,11 @@
 </script>
 
 <style>
+  #main-view {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
   #comparison-side-menu {
     text-align: left;
   }

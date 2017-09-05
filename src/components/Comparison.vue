@@ -2,8 +2,14 @@
   <div>
 
     <meta-view :currentComparison="currentComparison"></meta-view>
-    <decision-view :currentComparison="currentComparison"></decision-view>
-    <scoreboard-view :currentComparison="currentComparison"></scoreboard-view>
+    <div class="row">
+      <div class="col-sm-6">
+        <decision-view :currentComparison="currentComparison"></decision-view>
+      </div>
+      <div class="col-sm-6">
+        <scoreboard-view :currentComparison="currentComparison"></scoreboard-view>
+      </div>
+    </div>
     <participant-view :currentComparison="currentComparison"></participant-view>
 
   </div>
@@ -57,3 +63,9 @@
     }
   }
 </script>
+
+<style>
+  .btn-danger {
+    background-color: #be1931;
+  }
+</style>

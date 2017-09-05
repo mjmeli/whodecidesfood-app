@@ -21,7 +21,7 @@
       <div v-bind:class="{ 'has-error': errors.has('Name') }">
 
         <div class="meta-view-input">
-          <input class="form-control"
+          <input class="form-control meta-name-input"
                  v-model="name"
                  v-validate="'required|max:20'"
                  data-vv-name="Name">
@@ -107,9 +107,22 @@
 <style>
   #meta-view {
     margin-bottom: 20px;
+    text-align: center;
+  }
+
+  #meta-view h2 {
+    margin-top: 0px;
   }
 
   #meta-view .btn {
     margin-left: 2px;
+  }
+
+  #meta-view .meta-name-input {
+    max-width: 300px;
+    margin-bottom: 10px;
+    display: inline-block;
+    width: auto;
+    text-align: center;
   }
 </style>

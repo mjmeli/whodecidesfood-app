@@ -1,7 +1,7 @@
 <template>
   <div id="participant-view" class="panel panel-default" v-if="currentComparison">
     <div class="panel-heading">
-      Participants
+      Edit Participants
       <a class="icon" @click="addRow()">
         <span class="glyphicon glyphicon-plus"></span>
       </a>
