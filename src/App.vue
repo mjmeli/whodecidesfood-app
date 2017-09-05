@@ -11,9 +11,9 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">
+            <router-link to="/" class="navbar-brand">
               <img id="logo" src="static/logo.png" alt="whoDecidesFood?">
-            </a>
+            </router-link>
           </div>
           <div id="navbar-options" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
