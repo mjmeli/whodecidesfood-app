@@ -45,7 +45,7 @@
       position: absolute;
       color: #e7e7e7;
       width: 100%;
-      top: 35%;
+      top: 33%;
       text-align: center;
   }
 
