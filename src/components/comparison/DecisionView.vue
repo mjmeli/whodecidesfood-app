@@ -94,7 +94,7 @@
     methods: {
       addDecision() {
         // Don't proceed if errors
-        this.$validator.validateAll()
+        this.$validator.validateAll().then(() => {}, () => {})
         if (this.errors.any()) return
         this.error = '';
 

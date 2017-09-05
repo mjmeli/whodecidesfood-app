@@ -11,7 +11,7 @@
         class="form-control"
         placeholder="Email"
         v-model="credentials.email"
-        v-validate="'required'"
+        v-validate="'required|email'"
         data-vv-name="Email"
       >
       <p class="text-danger" v-if="errors.has('Email')">{{ errors.first('Email') }}</p>
@@ -48,27 +48,36 @@ export default {
   },
   methods: {
     submit() {
+      // Validate first
+      this.$validator.validateAll().then(() => {}, () => {})
+      if (this.errors.any()) return
+      this.error = '';
+
       var credentials = {
         session: {
           email: this.credentials.email,
           password: this.credentials.password
         }
       }
+
       auth.login(this, credentials).then((response) => {
         // Redirect to home
-        this.$router.push(redirect)
+        this.$router.push("/")
       }, (error) => {
         this.error = error.body.errors
       });
     }
+  },
+  created () {
+    // Redirect away if authenticated
+    if (auth.isAuthenticated()) this.$router.push("/");
   }
-
 }
 </script>
 
 <style>
   #login-page {
-    width: 850px;
+    max-width: 850px;
     margin-top: 20px;
     margin-bottom: 50px;
   }

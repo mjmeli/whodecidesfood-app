@@ -15,6 +15,7 @@ export default {
       context.$http
         .post(LOGIN_URL, creds).then(response => {
           store.commit('login', response.body.auth_token)
+          resolve(response.body.auth_token)
         }, error => {
           reject(error)
         })
@@ -22,18 +23,16 @@ export default {
   },
 
   // To sign up, we post to the /api/users endpoint and save the auth token
-  signup(context, creds, redirect) {
-    context.$http.post(SIGNUP_URL, creds).then(
-      function (response) {
-        store.commit('signup', response.body.auth_token)
-        if (redirect) {
-          this.$router.push(redirect)
-        }
-      },
-      function (error) {
-        console.log(error.body.errors)
-      }
-    );
+  signup(context, creds) {
+    return new Promise((resolve, reject) => {
+      context.$http
+        .post(SIGNUP_URL, creds).then(response => {
+          store.commit('signup', response.body.auth_token)
+          resolve(response.body.auth_token)
+        }, error => {
+          reject(error)
+        })
+    })
   },
 
   // To log out, we delete the session and remove the token
