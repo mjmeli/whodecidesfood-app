@@ -36,20 +36,21 @@
 </script>
 
 <style>
-#scoreboard-view {
-  text-align: left;
-}
 
-#scoreboard-view .list-group-item {
-  text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
+  #scoreboard-view {
+    text-align: left;
+  }
 
-#scoreboard-view .participant-score {
-  font-size: 24px;
-  margin-top: 1px;
-  margin-bottom: 7px;
-}
+  #scoreboard-view .list-group-item {
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  #scoreboard-view .participant-score {
+    font-size: 24px;
+    margin-top: 1px;
+    margin-bottom: 7px;
+  }
 
 </style>

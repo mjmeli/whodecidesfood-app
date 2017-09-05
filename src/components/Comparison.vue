@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="comparison-page">
 
     <meta-view :currentComparison="currentComparison"></meta-view>
     <div class="row">
@@ -65,7 +65,7 @@
 </script>
 
 <style>
-  .btn-danger {
+  #comparison-page .btn-danger {
     background-color: #be1931;
   }
 </style>
