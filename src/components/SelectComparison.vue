@@ -29,8 +29,8 @@
       </div>
       <div class="col-sm-9">
         <router-view v-if="!isOnHomePage"></router-view>
-        <div v-else class="text-center">
-          <h3>Select an existing comparison from the menu to the left, or create a new one.</h3>
+        <div v-else class="instruction-text text-center">
+          <h3>Select an existing comparison from the menu to the left, or create a new one by clicking "New".</h3>
         </div>
       </div>
     </div>
@@ -90,6 +90,12 @@
   #main-view {
     margin-top: 50px;
     margin-bottom: 50px;
+  }
+
+  #main-view .instruction-text {
+    /*max-width: 350px;*/
+    display: block;
+    margin: auto;
   }
 
   #comparison-side-menu {
