@@ -149,7 +149,6 @@
 #navbar .logout-link > a:hover {
   color: #e7e7e7 !important;
   font-weight: bold;
-  background-color: #e7e7e7;
 }
 
 .site-footer {
