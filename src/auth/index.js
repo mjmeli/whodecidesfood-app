@@ -46,22 +46,10 @@ export default {
         }
       },
       function (error) {
-        console.log(error.body.errors)
+        // Do nothing...
       }
     );
   },
-
-  // checkAuth() {
-  //   console.log("CHECKING AUTH")
-  //
-  //   var jwt = localStorage.getItem('id_token')
-  //   if(jwt) {
-  //     this.user.authenticated = true
-  //   }
-  //   else {
-  //     this.user.authenticated = false
-  //   }
-  // },
 
   // The object to be passed as a header for authenticated requests
   getAuthHeader() {

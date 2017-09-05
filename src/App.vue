@@ -20,7 +20,7 @@
               <li><router-link to="/">Home</router-link></li>
               <li v-if="!authenticated"><router-link to="/login">Login</router-link></li>
               <li v-if="!authenticated" class="signup-link"><router-link to="/signup">Sign-Up</router-link></li>
-              <li v-if="authenticated"><button class="btn btn-primary" @click="logout()">Logout</button></li>
+              <li v-if="authenticated" class="logout-link"><a href="#" @click="logout()">Logout</a></li>
             </ul>
           </div>
         </div>
@@ -135,6 +135,21 @@
 #navbar .signup-link > a:hover {
   color: #e7e7e7 !important;
   font-weight: bold;
+}
+
+#navbar .logout-link {
+  background-color: #be1931;
+}
+
+#navbar .logout-link > a {
+  color: #e7e7e7;
+  font-weight: bold;
+}
+
+#navbar .logout-link > a:hover {
+  color: #e7e7e7 !important;
+  font-weight: bold;
+  background-color: #e7e7e7;
 }
 
 .site-footer {

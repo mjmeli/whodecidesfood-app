@@ -9,7 +9,7 @@ var store = new Vuex.Store({
     auth_token: "",
     authenticated: false,
     comparisons: [],
-    currentComparisonId: -1,
+    currentComparisonId: -1
   },
   mutations: {
     login(state, auth_token) {
@@ -18,6 +18,7 @@ var store = new Vuex.Store({
     },
     signup(state, auth_token) {
       state.auth_token = auth_token;
+      state.authenticated = true;
     },
     logout(state) {
       state.auth_token = "";
