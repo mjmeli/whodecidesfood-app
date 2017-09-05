@@ -109,4 +109,10 @@
     visibility: hidden;
   }
 
+  /* Color of active item */
+  #comparison-side-menu .list-group-item.active {
+    background-color: #be1931;
+    border-color: #be1931;
+  }
+
 </style>

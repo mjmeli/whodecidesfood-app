@@ -18,19 +18,25 @@
           <div id="navbar-options" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
               <li><router-link to="/">Home</router-link></li>
-              <li><router-link to="/login">Login</router-link></li>
-              <li><router-link to="/signup">Sign-Up</router-link></li>
-              <li><button class="btn btn-primary" v-if="authenticated" @click="logout()">Logout</button></li>
+              <li v-if="!authenticated"><router-link to="/login">Login</router-link></li>
+              <li v-if="!authenticated" class="signup-link"><router-link to="/signup">Sign-Up</router-link></li>
+              <li v-if="authenticated"><button class="btn btn-primary" @click="logout()">Logout</button></li>
             </ul>
           </div>
         </div>
       </nav>
     </div>
 
-    <!-- Container for content -->
-    <div class="container text-center">
-        <router-view></router-view>
-    </div>
+    <!-- Content -->
+    <router-view></router-view>
+
+    <footer class="site-footer">
+      <div class="container">
+        <h4>Who Decides Food?</h4>
+        <p>Contact: <a href="https://github.com/mjmeli/">@mjmeli</a></p>
+      </div>
+    </footer>
+
   </div>
 </template>
 
@@ -55,6 +61,7 @@
 </script>
 
 <style>
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -70,6 +77,16 @@
   max-height: 56px;
 }
 
+#navbar .navbar {
+  margin-bottom: 0px;
+}
+
+#navbar .navbar-default {
+  border-top-width: 2px;
+  border-top-color: #be1931;
+  border-bottom-width: 2px;
+}
+
 #navbar .navbar-brand {
   height: 76px; /* navbar height, not image height */
   padding-top: 10px;
@@ -81,9 +98,19 @@
    then add the appropriate amount
    i.e. 80px height = 30px on top and bottom */
 
+#navbar .nav > li {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 16px;
+}
+
 #navbar .nav > li > a {
   padding-top: 28px;
   padding-bottom: 28px;
+}
+
+#navbar .nav > li > a:hover {
+  color: #be1931;
 }
 
 #navbar .nav > li > .btn {
@@ -94,5 +121,31 @@
 #navbar .navbar-toggle {
   padding: 10px;
   margin: 21px 15px 21px 0;
+}
+
+#navbar .signup-link {
+  background-color: #be1931;
+}
+
+#navbar .signup-link > a {
+  color: #e7e7e7;
+  font-weight: bold;
+}
+
+#navbar .signup-link > a:hover {
+  color: #e7e7e7 !important;
+  font-weight: bold;
+}
+
+.site-footer {
+  background-color: #be1931;
+  color: #e7e7e7;
+  margin-top: -5px;
+  text-align: center;
+  padding: 5px;
+}
+
+.site-footer a {
+  color: #e7e7e7;
 }
 </style>
