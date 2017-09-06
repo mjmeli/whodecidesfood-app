@@ -53,6 +53,7 @@
 
 <style>
 
+  /* Desktop */
   @media (min-width: 768px) {
     #logo {
       height: 100%;
@@ -70,8 +71,29 @@
       padding: 10px;
       margin: 21px 15px 21px 0;
     }
+
+    /* ***** */
+      /* line height is 20px by default
+         so determine new .navbar-brand height
+         then compute padding by adding the appropriate amount
+         i.e. 80px navbar-brand height = 30px on top and bottom */
+      #navbar .nav > li > a {
+        padding-top: 28px;
+        padding-bottom: 28px;
+      }
+
+      #navbar .nav > li > a:hover {
+        color: #be1931;
+      }
+
+      #navbar .nav > li > .btn {
+        padding-top: 28px;
+        padding-bottom: 28px;
+      }
+    /* ***** */
   }
 
+  /* Mobile */
   @media (max-width: 768px) {
     #logo {
       height: 100%;
@@ -89,6 +111,26 @@
       padding: 10px;
       margin: 10px 15px 10px 0;
     }
+
+    /* ***** */
+      /* line height is 20px by default
+         so determine new .navbar-brand height
+         then compute padding by adding the appropriate amount
+         i.e. 80px navbar-brand height = 30px on top and bottom */
+      #navbar .nav > li > a {
+        padding-top: 18px;
+        padding-bottom: 18px;
+      }
+
+      #navbar .nav > li > a:hover {
+        color: #be1931;
+      }
+
+      #navbar .nav > li > .btn {
+        padding-top: 18px;
+        padding-bottom: 18px;
+      }
+    /* ***** */
   }
 
   #navbar .navbar {
@@ -106,26 +148,6 @@
     padding-right: 10px;
     font-size: 16px;
   }
-
-/* ***** */
-  /* line height is 20px by default
-     so determine new .navbar-brand height
-     then compute padding by adding the appropriate amount
-     i.e. 80px navbar-brand height = 30px on top and bottom */
-  #navbar .nav > li > a {
-    padding-top: 28px;
-    padding-bottom: 28px;
-  }
-
-  #navbar .nav > li > a:hover {
-    color: #be1931;
-  }
-
-  #navbar .nav > li > .btn {
-    padding-top: 28px;
-    padding-bottom: 28px;
-  }
-/* ***** */
 
   #navbar .signup-link {
     background-color: #be1931;
