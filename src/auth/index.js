@@ -1,11 +1,9 @@
+import api from '../api'
 import store from '../vuex/store'
 
 // URL and endpoint constants
-const API_URL = 'http://localhost:3000/api/'
-const LOGIN_URL = API_URL + 'sessions/'
-const SIGNUP_URL = API_URL + 'users/'
-
-var errors = "";
+const LOGIN_URL = api.shared.API_URL + 'sessions/'
+const SIGNUP_URL = api.shared.API_URL + 'users/'
 
 export default {
 

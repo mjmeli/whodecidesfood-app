@@ -8,9 +8,11 @@ import store from '../vuex/store'
 import Comparisons from './comparisons'
 import Participants from './participants'
 import Decisions from './decisions'
+import Shared from './shared'
 
 export default {
   comparisons: Comparisons,
   participants: Participants,
-  decisions: Decisions
+  decisions: Decisions,
+  shared: Shared
 }
