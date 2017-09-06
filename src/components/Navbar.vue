@@ -53,10 +53,42 @@
 
 <style>
 
-  #logo {
-    height: 100%;
-    width: auto;
-    max-height: 56px;
+  @media (min-width: 768px) {
+    #logo {
+      height: 100%;
+      width: auto;
+      max-height: 56px;
+    }
+
+    #navbar .navbar-brand {
+      height: 76px; /* navbar height, not image height = image height + padding */
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    #navbar .navbar-toggle {
+      padding: 10px;
+      margin: 21px 15px 21px 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    #logo {
+      height: 100%;
+      width: auto;
+      max-height: 36px;
+    }
+
+    #navbar .navbar-brand {
+      height: 56px; /* navbar height, not image height = image height + padding */
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    #navbar .navbar-toggle {
+      padding: 10px;
+      margin: 10px 15px 10px 0;
+    }
   }
 
   #navbar .navbar {
@@ -69,23 +101,17 @@
     border-bottom-width: 2px;
   }
 
-  #navbar .navbar-brand {
-    height: 76px; /* navbar height, not image height */
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-
-  /* line height is 20px by default
-     so determine new .navbar brand height
-     then add the appropriate amount
-     i.e. 80px height = 30px on top and bottom */
-
   #navbar .nav > li {
     padding-left: 10px;
     padding-right: 10px;
     font-size: 16px;
   }
 
+/* ***** */
+  /* line height is 20px by default
+     so determine new .navbar-brand height
+     then compute padding by adding the appropriate amount
+     i.e. 80px navbar-brand height = 30px on top and bottom */
   #navbar .nav > li > a {
     padding-top: 28px;
     padding-bottom: 28px;
@@ -99,11 +125,7 @@
     padding-top: 28px;
     padding-bottom: 28px;
   }
-
-  #navbar .navbar-toggle {
-    padding: 10px;
-    margin: 21px 15px 21px 0;
-  }
+/* ***** */
 
   #navbar .signup-link {
     background-color: #be1931;
