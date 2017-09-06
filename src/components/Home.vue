@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Load component based on authentication -->
-    <comparisons v-if="authenticated"></comparisons>
-    <welcome v-else></welcome>
+    <welcome v-if="!authenticated"></welcome>
+    <comparisons v-else></comparisons>
   </div>
 </template>
 

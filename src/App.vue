@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div>
     <!-- Navbar -->
     <div id="navbar">
       <nav class="navbar navbar-default navbar-static-top">
