@@ -6,7 +6,7 @@
 import auth from '../auth'
 
 // Global constants
-const API_URL = 'http://localhost:3000/api/'
+const API_URL = process.env.NODE_ENV === 'production' ? 'http://www.whodecidesfood.com/api/' : 'http://localhost:3000/api/'
 
 export default {
   API_URL,
