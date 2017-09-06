@@ -62,6 +62,12 @@
 
 <style>
 
+  /* Scrollbar always visible */
+  html {
+    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll;
+  }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
