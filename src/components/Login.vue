@@ -33,6 +33,7 @@
 
 <script>
 import auth from '../auth'
+import error_parse from '../error_parse'
 
 export default {
   data() {
@@ -64,7 +65,7 @@ export default {
         // Redirect to home
         this.$router.push("/")
       }, (error) => {
-        this.error = error.body.errors
+        this.error = error_parse.parseErrors(error.body)
       });
     }
   },
