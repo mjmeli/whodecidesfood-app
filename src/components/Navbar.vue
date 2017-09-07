@@ -13,7 +13,7 @@
             <img id="logo" src="static/logo.png" alt="whoDecidesFood?">
           </router-link>
         </div>
-        <div id="navbar-options" class="navbar-collapse collapse" data-toggle="collapse" data-target="#navbar-options">
+        <div id="navbar-options" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
               <router-link to="/">Home</router-link>

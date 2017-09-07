@@ -1,5 +1,5 @@
 <template>
-  <div id="footer" class="site-footer">
+  <footer id="footer" class="site-footer">
     <div class="container-fluid">
       <p class="footer-title">Who Decides Food?</p>
       <p>© {{ new Date().getFullYear() }}</p>

@@ -29,10 +29,24 @@
 
 <style>
 
-  /* Scrollbar always visible */
-  html {
-    overflow: -moz-scrollbars-vertical;
-    overflow-y: scroll;
+  /* Scrollbar always visible on desktop */
+  @media (min-width: 768px) {
+    html {
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+  }
+
+  @media (max-width: 768px) {
+    html {
+      overflow: hidden;
+      height: 100%;
+    }
+
+    body {
+      height: 100%;
+      overflow: auto;
+    }
   }
 
   #app {
