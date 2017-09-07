@@ -6,12 +6,8 @@
     <!-- Content -->
     <router-view></router-view>
 
-    <footer class="site-footer">
-      <div class="container">
-        <h4>Who Decides Food?</h4>
-        <p>Contact: <a href="https://github.com/mjmeli/">@mjmeli</a></p>
-      </div>
-    </footer>
+    <!-- Footer -->
+    <footer-view></footer-view>
 
   </div>
 </template>
@@ -21,10 +17,12 @@
   import 'bootstrap-css'
 
   import Navbar from './components/Navbar'
+  import Footer from './components/Footer'
 
   export default {
     components: {
       'navbar': Navbar,
+      'footer-view': Footer
     }
   };
 </script>
@@ -44,18 +42,6 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-  }
-
-  .site-footer {
-    background-color: #be1931;
-    color: #e7e7e7;
-    margin-top: -5px;
-    text-align: center;
-    padding: 5px;
-  }
-
-  .site-footer a {
-    color: #e7e7e7;
   }
 
 </style>
