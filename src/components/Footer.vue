@@ -1,5 +1,5 @@
 <template>
-  <footer id="footer" class="site-footer">
+  <div id="footer" class="site-footer">
     <div class="container-fluid">
       <p class="footer-title">Who Decides Food?</p>
       <p>© {{ new Date().getFullYear() }}</p>
@@ -8,7 +8,7 @@
         <a href="mailto:me@michaelmeli.com" target="_blank"><img src="/static/email-icon.png" alt="Email Me" /></a>
       </div>
     </div>
-  </footer>
+  </div>
 </template>
 
 <script>
