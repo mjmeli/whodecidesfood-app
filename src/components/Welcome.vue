@@ -110,14 +110,16 @@
       box-decoration-break: clone;
       margin-bottom: 0px;
       margin-top: 0px;
-      font-size: 18px;
+      font-size: 19px;
+      margin-left: 15px;
+      margin-right: 15px;
     }
 
     .welcome-page-text-mobile > .btn {
       background-color: #be1931;
       border-color: #be1931;
-      margin-bottom: 20px;
-      margin-top: 15px;
+      margin-bottom: 30px;
+      margin-top: 25px;
     }
 
     .welcome-page-text-mobile > .btn:hover {
