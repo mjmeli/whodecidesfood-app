@@ -3,13 +3,13 @@
 
     <div class="welcome-page-container">
 
-      <!-- <div class="welcome-page-text-desktop">
+      <div class="welcome-page-text-desktop">
         <p>The #1 cause of fights in relationships is deciding where to eat.
         <br/>
         Handle this in a nuanced manner by turning it into a competition!</p>
         <br/>
         <router-link to="/signup" tag="button" class="btn btn-primary btn-lg">Sign-Up Now!</router-link>
-      </div> -->
+      </div>
 
       <img class="img-responsive welcome-page-image" src="static/couple.jpg" alt="Couple eating romantic dinner after arguing about where to eat" />
 
