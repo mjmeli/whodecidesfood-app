@@ -24,7 +24,8 @@
           <input class="form-control meta-name-input"
                  v-model="name"
                  v-validate="'required|max:20'"
-                 data-vv-name="Name">
+                 data-vv-name="Name"
+                 @keyup.enter="editComparison()">
           <p class="text-danger" v-if="errors.has('Name')">{{ errors.first('Name') }}</p>
         </div>
 

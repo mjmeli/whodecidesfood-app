@@ -42,7 +42,8 @@
               <input class="form-control"
                      v-model="name"
                      v-validate="'required|verify_participant|verify_participant_unique'"
-                     data-vv-name="Name">
+                     data-vv-name="Name"
+                     @keyup.enter="editParticipant(i)">
               <p class="text-danger" v-if="errors.has('Name')">{{ errors.first('Name') }}</p>
             </div>
           </div>

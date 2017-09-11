@@ -15,7 +15,8 @@
                  placeholder="Enter comparison title"
                  v-model="comparison.title"
                  v-validate="'required|max:20'"
-                 data-vv-name="Title">
+                 data-vv-name="Title"
+                 @keyup.enter="submit()">
           <p class="text-danger" v-if="errors.has('Title')">{{ errors.first('Title') }}</p>
         </div>
       </div>
@@ -37,6 +38,7 @@
                             v-validate="'verify_participant|verify_participant_unique'"
                             data-vv-scope="participants"
                             data-vv-as="Participant"
+                            @keyup.enter="submit()"
                             :data-vv-name="'Participant #' + (index + 1)"/>
                     <span class="input-group-btn">
                       <button class="btn btn-danger" @click="removeRow(index)">

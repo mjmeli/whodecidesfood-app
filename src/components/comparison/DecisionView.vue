@@ -30,7 +30,8 @@
             v-model="location"
             v-validate="'required'"
             data-vv-name="Location"
-            placeholder="Restaurant name">
+            placeholder="Restaurant name"
+            @keyup.enter="addDecision()">
           <p class="text-danger" v-if="errors.has('Location')">{{ errors.first('Location') }}</p>
         </div>
 
