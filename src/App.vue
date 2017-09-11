@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <!-- Navbar -->
     <navbar></navbar>
 
@@ -53,9 +53,11 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+  }
+
+  #app .text-danger {
+    color: #be1931;
   }
 
 </style>

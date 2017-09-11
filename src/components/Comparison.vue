@@ -68,4 +68,9 @@
   #comparison-page .btn-danger {
     background-color: #be1931;
   }
+
+  #comparison-page .btn-danger:hover {
+    background-color: #ab162c;
+    border-color: #ab162c;
+  }
 </style>

@@ -177,6 +177,15 @@
     text-align: left
   }
 
+  #create-comparison .btn-danger {
+    background-color: #be1931;
+  }
+
+  #create-comparison .btn-danger:hover {
+    background-color: #ab162c;
+    border-color: #ab162c;
+  }
+
   #participants-table .glyphicon-plus {
     margin-right: 10px;
   }
@@ -185,10 +194,6 @@
     border-top: none;
     padding: 0px;
     padding-bottom: 10px;
-  }
-
-  .red-text {
-    color: #ff0000;
   }
 
   p.text-danger {
