@@ -13,6 +13,7 @@
         v-model="credentials.email"
         v-validate="'required|email'"
         data-vv-name="Email"
+        @keyup.enter="submit()"
       >
       <p class="text-danger" v-if="errors.has('Email')">{{ errors.first('Email') }}</p>
     </div>
@@ -25,6 +26,7 @@
         v-validate="'required'"
         data-vv-name="Password"
         name="Password"
+        @keyup.enter="submit()"
       >
       <p class="text-danger" v-if="errors.has('Password')">{{ errors.first('Password') }}</p>
     </div>
@@ -37,6 +39,7 @@
         v-validate="'required|confirmed:Password'"
         data-vv-name="Password Confirmation"
         data-vv-as="password"
+        @keyup.enter="submit()"
       >
       <p class="text-danger" v-if="errors.has('Password Confirmation')">{{ errors.first('Password Confirmation') }}</p>
     </div>
