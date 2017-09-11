@@ -7,6 +7,10 @@ export default {
 
     if (!errors) return null
 
+    if (typeof errors === 'string' || errors instanceof String) {
+      return errors;
+    }
+
     for (var key in errors) {
       var keyErrors = errors[key]
       for (var keyError in keyErrors) {
