@@ -30,7 +30,7 @@ cp -r dist/* $API_PUBLIC_PATH
 # pushing to Heroku. This will overwrite Heroku git history!
 cd $API_PATH
 git checkout -b heroku-deploy
-git add --all
+git add public
 git commit -m "deploy"
 git push -f heroku heroku-deploy:master
 heroku run rake db:migrate  # in case we made backend changes
