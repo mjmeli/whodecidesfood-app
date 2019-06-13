@@ -38,7 +38,7 @@
         v-model="credentials.password_confirmation"
         v-validate="'required|confirmed:Password'"
         data-vv-name="Password Confirmation"
-        data-vv-as="password"
+        data-vv-as="Password Confirmation"
         @keyup.enter="submit()"
       >
       <p class="text-danger" v-if="errors.has('Password Confirmation')">{{ errors.first('Password Confirmation') }}</p>
