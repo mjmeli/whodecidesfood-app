@@ -3,7 +3,7 @@
 
 Vue.js-based frontend for WhoDecidesFood, a web application that allows users to track who decides food as a competition. This front-end is designed to be integrated and deployed with the Ruby on Rails based REST API backend.
 
-See the [https://github.com/mjmeli/whodecidesfood-api](whodecidesfood-app) repo for the backend.
+See the [whodecidesfood-app](https://github.com/mjmeli/whodecidesfood-app) repo for the backend.
 
 ## Team
 * Michael Meli
