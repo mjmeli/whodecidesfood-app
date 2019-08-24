@@ -74,7 +74,7 @@
           <router-link class="btn btn-danger" to="/">Cancel</router-link>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 

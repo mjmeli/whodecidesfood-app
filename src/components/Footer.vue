@@ -8,7 +8,7 @@
         <a href="mailto:me@michaelmeli.com" target="_blank"><img src="/static/email-icon.png" alt="Email Me" /></a>
       </div>
     </div>
-  </div>
+  </footer>
 </template>
 
 <script>
