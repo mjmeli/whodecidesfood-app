@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const router = require('./routes');
 const morgan = require('morgan');
+const cors = require('cors');
+const router = require('./routes');
 const authenicator = require('./helpers/authenticator');
 
 const app = express();
@@ -12,6 +13,12 @@ if (process.env.NODE_ENV === 'production') {
     console.log('THIS IS NOT SECURE');
     throw new Error('Some idiot is trying to use the mock API in production!');
 }
+
+// CORS must be disabled for local development since the API and front end are on different ports
+const corsOptions = {
+    origin: 'http://localhost:8080'
+};
+app.use(cors(corsOptions));
 
 // Parse incoming requests data
 app.use(bodyParser.urlencoded({ extended: false }));

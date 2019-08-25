@@ -1,9 +1,15 @@
 export default {
-  parseErrors(errors) {
-    if (errors == undefined) return;
+  parseErrors (errors) {
+    if (errors === undefined) {
+      return
+    };
 
-    var re = ""
-    errors = errors.errors
+    var re = ''
+
+    // Errors may be embedded
+    if (errors.errors) {
+      errors = errors.errors;
+    }
 
     if (!errors) return null
 
