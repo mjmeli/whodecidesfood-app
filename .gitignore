@@ -42,4 +42,4 @@ test/unit/coverage
 selenium-debug.log
 
 # Mock API data
-tools/db.json
+mock_api/db/db.json

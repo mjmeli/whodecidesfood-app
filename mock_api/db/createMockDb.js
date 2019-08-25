@@ -3,9 +3,10 @@
 //      This mimics the structure of the actual backend datastore, but we omit irrelevant properties.
 
 /* eslint-disable no-console */
-const fs = require("fs");
-const path = require("path");
-const faker = require("faker");
+const fs = require('fs');
+const path = require('path');
+const faker = require('faker');
+const models = require('../models');
 
 const getNextId = (arr) => arr.length ? Math.max.apply(Math, (arr.map(a => a.id))) + 1 : 0;
 
@@ -13,36 +14,37 @@ const doNTimes = (n, f) => Array(n).fill().map(() => f());
 
 const create = (data, userEmailOverride = null, userPasswordOverride = null) => {
     const user = createUser(data.users);
-    if (userEmailOverride)
+    if (userEmailOverride) {
         user.email = userEmailOverride;
-    if (userPasswordOverride)
+    }
+    if (userPasswordOverride) {
         user.password = userPasswordOverride;
+    }
 
     doNTimes(3, () => {
         const comparison = createComparison(data.comparisons, user.id);
-        user.comparisonIds.push(comparison.id);
+        user.comparison_ids.push(comparison.id);
 
         doNTimes(2, () => {
             const participant = createParticipant(data.participants, comparison.id);
-            comparison.participantIds.push(participant.id);
+            comparison.participant_ids.push(participant.id);
 
             doNTimes(5, () => {
                 const decision = createDecision(data.decisions, comparison.id, participant.id);
-                comparison.decisionIds.push(decision.id);
-                participant.decisionIds.push(decision.id);
+                comparison.decision_ids.push(decision.id);
+                participant.decision_ids.push(decision.id);
             });
         });
     });
-}
+};
 
 const createUser = (users) => {
     const id = getNextId(users);
     const user = {
+        ...models.user(),
         id,
         email: faker.internet.email(),
-        password: faker.internet.password(),
-        auth_token: null,
-        comparisonIds : []
+        password: faker.internet.password()
     };
 
     users.push(user);
@@ -52,11 +54,10 @@ const createUser = (users) => {
 const createComparison = (comparisons, userId) => {
     const id = getNextId(comparisons);
     const comparison = {
+        ...models.comparison(),
         id,
         title: faker.commerce.productName(),
-        userId,
-        decisionIds: [],
-        participantIds: []
+        user_id: userId
     };
 
     comparisons.push(comparison);
@@ -66,11 +67,11 @@ const createComparison = (comparisons, userId) => {
 const createParticipant = (participants, comparisonId) => {
     const id = getNextId(participants);
     const participant = {
+        ...models.participant(),
         id,
         name: faker.name.findName(),
         score: faker.random.number(100),
-        comparisonId,
-        decisionIds: []
+        comparison_id: comparisonId
     };
 
     participants.push(participant);
@@ -80,16 +81,17 @@ const createParticipant = (participants, comparisonId) => {
 const createDecision = (decisions, comparisonId, participantId) => {
     const id = getNextId(decisions);
     const decision = {
+        ...models.decision(),
         id,
-        meal: faker.random.arrayElement(["Breakfast", "Lunch", "Dinner", "Snack"]),
+        meal: faker.random.arrayElement(['Breakfast', 'Lunch', 'Dinner', 'Snack']),
         location: faker.company.companyName(),
-        participantId,
-        comparisonId
+        participant_id: participantId,
+        comparison_id: comparisonId
     };
 
     decisions.push(decision);
     return decision;
-}
+};
 
 // Our database
 const data = {
@@ -103,11 +105,9 @@ const data = {
 doNTimes(5, () => create(data));
 
 // Our known test user
-create(data, "test@test.com", "test");
+create(data, 'test@test.com', 'test');
 
 // Write to file
 const dataJson = JSON.stringify(data);
-const filepath = path.join(__dirname, "db.json");
-fs.writeFile(filepath, dataJson, function(err) {
-    err ? console.log(err) : console.log("Mock DB created.");
-});
+const filepath = path.join(__dirname, 'db.json');
+fs.writeFile(filepath, dataJson, err => err ? console.log(err) : console.log('Mock DB created.'));
