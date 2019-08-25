@@ -18,7 +18,7 @@ The only requirement is `node`.
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080, with mock API at localhost:3001
+# serve with hot reload at localhost:8080, with mock API at localhost:3000
 npm start
 
 # build for production with minification
