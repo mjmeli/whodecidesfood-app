@@ -2,14 +2,16 @@ const db = require('../db/db');
 
 class SessionsController {
     create (req, res) {
-        if (!req.body.email || !req.body.password) {
+        const credentials = req.body.session;
+
+        if (!credentials.email || !credentials.password) {
             return res.status(400).json('Email and password are required');
         }
 
         db.getUsers()
             .then(users => {
-                const user = users.find(c => c.email === req.body.email);
-                if (!user || user.password !== req.body.password) {
+                const user = users.find(c => c.email === credentials.email);
+                if (!user || user.password !== credentials.password) {
                     res.status(401).json('Invalid username/password combination');
                 } else {
                     db.createSession(user.id, user)

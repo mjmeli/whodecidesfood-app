@@ -2,8 +2,8 @@ const db = require('../db/db');
 const { createErrors } = require('../helpers/resultHandlers');
 
 const authenticator = async (req, res, next) => {
-    // Login path and signup paths are public
-    if ((req.path.includes('/api/users') || req.path.includes('/api/sessions')) && req.method === 'POST') {
+    // Login/logout path and signup paths are public
+    if ((req.path.includes('/api/sessions') || (req.path.includes('/api/users')) && req.method === 'POST')) {
         return next();
     }
 
