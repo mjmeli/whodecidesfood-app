@@ -74,7 +74,7 @@ const getUsers = () => {
     });
 };
 
-const saveUser = (userId, user) => {
+const saveUser = (userId, user, authToken = null) => {
     return new Promise(resolve => {
         getData()
             .then(data => {
@@ -84,9 +84,11 @@ const saveUser = (userId, user) => {
                 if (userId) {
                     // Update
                     const currentIndex = data.users.findIndex(c => c.id === userId);
+                    const currentUser = data.users[currentIndex];
                     newUser = {
-                        ...data.users[currentIndex],
-                        ...user
+                        ...currentUser,
+                        ...user,
+                        auth_token: authToken || currentUser.auth_token
                     };
                     data.users[currentIndex] = newUser;
                 } else {
@@ -96,7 +98,7 @@ const saveUser = (userId, user) => {
                         ...models.user(),
                         ...user,
                         id,
-                        auth_token: createAuthToken()
+                        auth_token: authToken || createAuthToken()
                     };
                     data.users.push(newUser);
                 }
@@ -110,13 +112,11 @@ const saveUser = (userId, user) => {
 /* Sessions */
 
 const createSession = (userId, user) => {
-    user.auth_token = createAuthToken();
-    return saveUser(userId, user);
+    return saveUser(userId, user, createAuthToken());
 };
 
 const deleteSession = (userId, user) => {
-    user.auth_token = null;
-    return saveUser(userId, user);
+    return saveUser(userId, user, null);
 };
 
 /* Comparisons */

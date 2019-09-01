@@ -15,14 +15,14 @@ router.delete('/api/sessions/:authToken', controllers.SessionsController.delete)
 router.get('/api/comparisons', controllers.ComparisonsController.getAll);
 router.get('/api/comparisons/:comparisonId', controllers.ComparisonsController.get);
 router.post('/api/comparisons', controllers.ComparisonsController.save);
-router.put('/api/comparisons/:comparisonId', controllers.ComparisonsController.save);
+router.patch('/api/comparisons/:comparisonId', controllers.ComparisonsController.save);
 router.delete('/api/comparisons/:comparisonId', controllers.ComparisonsController.delete);
 
 // Participants
 router.get('/api/comparisons/:comparisonId/participants', controllers.ParticipantsController.getAll);
 router.get('/api/comparisons/:comparisonId/participants/:participantId', controllers.ParticipantsController.get);
 router.post('/api/comparisons/:comparisonId/participants', controllers.ParticipantsController.save);
-router.put('/api/comparisons/:comparisonId/participants/:participantId', controllers.ParticipantsController.save);
+router.patch('/api/comparisons/:comparisonId/participants/:participantId', controllers.ParticipantsController.save);
 router.delete('/api/comparisons/:comparisonId/participants/:participantId', controllers.ParticipantsController.delete);
 
 // Decisions

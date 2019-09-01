@@ -15,7 +15,7 @@ class DecisionsController {
         if (!decision.meal || !decision.location) {
             return createErrors(400, 'meal and location are required', res);
         }
-        if (!decision.participant_id) {
+        if (!decision.participant_id && decision.participant_id !== 0) {
             return createErrors(400, 'participant_id is required', res);
         } else {
             decision.participant_id = parseInt(decision.participant_id);
