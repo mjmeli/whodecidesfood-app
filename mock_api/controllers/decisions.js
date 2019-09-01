@@ -4,19 +4,28 @@ const { createSuccess, createErrors } = require('../helpers/resultHandlers');
 const getIds = (req) => {
     const userId = parseInt(req.user.id);
     const comparisonId = parseInt(req.params.comparisonId);
-    const participantId = parseInt(req.body.participant_id);
-    return [ userId, comparisonId, participantId ];
+    return [ userId, comparisonId ];
 };
 
 class DecisionsController {
     create (req, res) {
-        const [ userId, comparisonId, participantId ] = getIds(req);
+        const [ userId, comparisonId ] = getIds(req);
 
-        if (!req.body.meal || !req.body.location) {
-            return createErrors(400, 'Meal and location are required', res);
+        const decision = req.body.decision ? req.body.decision : req.body;
+        if (!decision.meal || !decision.location) {
+            return createErrors(400, 'meal and location are required', res);
+        }
+        if (!decision.participant_id) {
+            return createErrors(400, 'participant_id is required', res);
+        } else {
+            decision.participant_id = parseInt(decision.participant_id);
         }
 
-        db.createDecision(userId, comparisonId, participantId, req.body)
+        if (!['Breakfast', 'Lunch', 'Dinner', 'Snack'].find(m => m === decision.meal)) {
+            return createErrors(400, 'Invalid meal type', res);
+        }
+
+        db.createDecision(userId, comparisonId, decision)
             .then(decision => createSuccess(decision, res))
             .catch(err => createErrors(404, err, res));
     }

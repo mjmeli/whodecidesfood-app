@@ -3,8 +3,17 @@ const { createErrors } = require('../helpers/resultHandlers');
 
 const authenticator = async (req, res, next) => {
     // Login/logout path and signup paths are public
-    if ((req.path.includes('/api/sessions') || (req.path.includes('/api/users')) && req.method === 'POST')) {
+    if (req.path.includes('/api/sessions') || (req.path.includes('/api/users')) && req.method === 'POST') {
         return next();
+    }
+
+    // All users paths besides the signup path are only for development
+    if (req.path.includes('/api/users')) {
+        if (process.env.NODE_ENV !== 'development') {
+            return createErrors(401, 'Admin access only', res);
+        } else {
+            return next();
+        }
     }
 
     // Check for authentication token
@@ -21,7 +30,7 @@ const authenticator = async (req, res, next) => {
     } else {
         // Inject the current user onto the request to be used later in the pipeline
         req.user = user;
-        next();
+        return next();
     }
 };
 

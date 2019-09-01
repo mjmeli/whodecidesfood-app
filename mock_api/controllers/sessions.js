@@ -1,23 +1,26 @@
 const db = require('../db/db');
+const { createSuccess, createErrors } = require('../helpers/resultHandlers');
 
 class SessionsController {
     create (req, res) {
-        const credentials = req.body.session;
+        const credentials = req.body.session ? req.body.session : req.body;
 
         if (!credentials.email || !credentials.password) {
-            return res.status(400).json('Email and password are required');
+            return createErrors(400, 'email and password are required', res);
         }
 
         db.getUsers()
             .then(users => {
                 const user = users.find(c => c.email === credentials.email);
                 if (!user || user.password !== credentials.password) {
-                    res.status(401).json('Invalid username/password combination');
+                    return createErrors(401, 'Invalid username/password combination', res);
                 } else {
                     db.createSession(user.id, user)
-                        .then(user => res.status(200).json({ auth_token: user.auth_token }));
+                        .then(user => createSuccess({ auth_token: user.auth_token }, res))
+                        .catch(err => createErrors(500, err, res));
                 }
-            });
+            })
+            .catch(err => createErrors(500, err, res));
     }
 
     delete (req, res) {
@@ -25,10 +28,11 @@ class SessionsController {
             .then(users => {
                 const user = users.find(c => c.auth_token === req.params.authToken);
                 if (!user) {
-                    res.status(400).json('No session found with that authentication token');
+                    return createErrors(400, 'No session found with that authentication token', res);
                 } else {
                     db.deleteSession(user.id, user)
-                        .then(user => res.status(200).json({ auth_token: user.auth_token }));
+                        .then(user => createSuccess({ auth_token: user.auth_token }, res))
+                        .catch(err => createErrors(500, err, res));
                 }
             });
     }

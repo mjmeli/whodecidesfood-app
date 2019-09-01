@@ -7,22 +7,34 @@ const getIds = (req) => {
     return [ userId, comparisonId ];
 };
 
+const mapDecisionsToIds = (comparison) => {
+    // Switch decisions to their ids instead of the full decision as this list will grow long
+    const { decisions, ...comparisonFiltered } = comparison;
+    comparisonFiltered.decision_ids = decisions.map(d => d.id);
+    return comparisonFiltered;
+};
+
 class ComparisonsController {
     getAll (req, res) {
         const [ userId ] = getIds(req);
 
         db.getComparisons(userId)
-            .then(comparisons => createSuccess(comparisons, res))
+            .then(comparisons => {
+                // Switch decisions to their ids instead of the full decision as this list will grow long
+                comparisons = comparisons.map(c => mapDecisionsToIds(c));
+                return createSuccess(comparisons, res);
+            })
             .catch(err => createErrors(404, err, res));
     }
 
     get (req, res) {
         const [ userId, comparisonId ] = getIds(req);
 
-        db.getComparisons(userId)
-            .then(comparisons => {
-                const comparison = comparisons.find(c => c.id === comparisonId);
-                createSuccess(comparison, res);
+        db.getComparison(userId, comparisonId)
+            .then(comparison => {
+                // Switch decisions to their ids instead of the full decision as this list will grow long
+                comparison = mapDecisionsToIds(comparison);
+                return createSuccess(comparison, res);
             })
             .catch(err => createErrors(404, err, res));
     }
@@ -30,11 +42,12 @@ class ComparisonsController {
     save (req, res) {
         const [ userId, comparisonId ] = getIds(req);
 
-        if (!req.body.title) {
-            return res.createErrors(400, 'Title is required', res);
+        const comparison = req.body.comparison ? req.body.comparison : req.body;
+        if (!comparison.title) {
+            return createErrors(400, 'title is required', res);
         }
 
-        db.saveComparison(userId, comparisonId, req.body)
+        db.saveComparison(userId, comparisonId, comparison)
             .then(comparison => createSuccess(comparison, res))
             .catch(err => createErrors(404, err, res));
     }

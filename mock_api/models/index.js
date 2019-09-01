@@ -15,16 +15,15 @@ const comparison = {
     id: null,
     title: null,
     user_id: null,
-    decision_ids: [],
-    participant_ids: []
+    participants: [],
+    decisions: []
 };
 
 const participant = {
     id: null,
     name: null,
     score: 0,
-    comparison_id: null,
-    decision_ids: []
+    comparison_id: null
 };
 
 const decision = {

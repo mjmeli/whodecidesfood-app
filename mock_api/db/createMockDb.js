@@ -26,13 +26,10 @@ const create = (data, userEmailOverride = null, userPasswordOverride = null) => 
         user.comparison_ids.push(comparison.id);
 
         doNTimes(2, () => {
-            const participant = createParticipant(data.participants, comparison.id);
-            comparison.participant_ids.push(participant.id);
+            const participant = createParticipant(comparison);
 
             doNTimes(5, () => {
-                const decision = createDecision(data.decisions, comparison.id, participant.id);
-                comparison.decision_ids.push(decision.id);
-                participant.decision_ids.push(decision.id);
+                createDecision(comparison, participant);
             });
         });
     });
@@ -64,41 +61,39 @@ const createComparison = (comparisons, userId) => {
     return comparison;
 };
 
-const createParticipant = (participants, comparisonId) => {
-    const id = getNextId(participants);
+const createParticipant = (comparison) => {
+    const id = getNextId(comparison.participants);
     const participant = {
         ...models.participant(),
         id,
         name: faker.name.findName(),
         score: faker.random.number(100),
-        comparison_id: comparisonId
+        comparison_id: comparison.id
     };
 
-    participants.push(participant);
+    comparison.participants.push(participant);
     return participant;
 };
 
-const createDecision = (decisions, comparisonId, participantId) => {
-    const id = getNextId(decisions);
+const createDecision = (comparison, participant) => {
+    const id = getNextId(comparison.decisions);
     const decision = {
         ...models.decision(),
         id,
         meal: faker.random.arrayElement(['Breakfast', 'Lunch', 'Dinner', 'Snack']),
         location: faker.company.companyName(),
-        participant_id: participantId,
-        comparison_id: comparisonId
+        participant_id: participant.id,
+        comparison_id: comparison.id
     };
 
-    decisions.push(decision);
+    comparison.decisions.push(decision);
     return decision;
 };
 
 // Our database
 const data = {
     users: [],
-    comparisons: [],
-    participants: [],
-    decisions: []
+    comparisons: []
 };
 
 // Random users to fill out the DB

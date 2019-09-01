@@ -1,3 +1,7 @@
+// "Database" library
+//      This abstracts the data access for the application.
+//      Current backend is just a JSON file, obviously this wouldn't be ideal in a production environment.
+
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -34,13 +38,31 @@ const saveData = (data) => {
     });
 };
 
-const validateComparisonAuthorization = (userId, comparisonId, data) => {
+const validateComparisonExistsAndAuthorized = (userId, comparisonId, data) => {
     const user = data.users.find(u => u.id === userId);
     if (!user) {
-        return false;
+        return [ false, null ];
     } else {
-        return user.comparison_ids.find(cid => cid === comparisonId);
+        const isAuthorized = !!user.comparison_ids.find(cid => cid === comparisonId);
+        const comparison = data.comparisons.find(c => c.id === comparisonId && c.user_id === userId);
+        const doesComparisonExist = !!comparison;
+        return [ isAuthorized && doesComparisonExist, comparison ];
     }
+};
+
+const validateParticipantExists = (comparison, participantId) => {
+    const participant = comparison.participants.find(p => p.id === participantId);
+    return [ !!participant, participant ];
+};
+
+const filterKeys = (obj, allowedKeys) => {
+    // Remove any invalid keys from an object
+    return Object.keys(obj)
+        .filter(key => allowedKeys.includes(key))
+        .reduce((retObj, key) => {
+            retObj[key] = obj[key];
+            return retObj;
+        }, {});
 };
 
 /* Users */
@@ -56,8 +78,9 @@ const saveUser = (userId, user) => {
     return new Promise(resolve => {
         getData()
             .then(data => {
-                let newUser;
+                user = filterKeys(user, [ 'email', 'password' ]);
 
+                let newUser;
                 if (userId) {
                     // Update
                     const currentIndex = data.users.findIndex(c => c.id === userId);
@@ -105,22 +128,38 @@ const getComparisons = (userId) => {
     });
 };
 
-const saveComparison = (userId, comparisonId, comparison) => {
+const getComparison = (userId, comparisonId) => {
     return new Promise((resolve, reject) => {
         getData()
             .then(data => {
-                let newComparison;
+                const [ isComparisonValid, comparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                if (!isComparisonValid) {
+                    return reject(new Error('Comparison not found for this user'));
+                }
 
+                return resolve(comparison);
+            });
+    });
+};
+
+const saveComparison = (userId, comparisonId, comparisonUpdate) => {
+    return new Promise((resolve, reject) => {
+        getData()
+            .then(data => {
+                comparisonUpdate = filterKeys(comparisonUpdate, [ 'title' ]);
+
+                let newComparison;
                 if (comparisonId) {
-                    if (!validateComparisonAuthorization(userId, comparisonId, data)) {
-                        reject('Comparison not found for this user');
+                    const [ isComparisonValid, currentComparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                    if (!isComparisonValid) {
+                        return reject(new Error('Comparison not found for this user'));
                     }
 
-                    // Update
-                    const currentIndex = data.comparisons.findIndex(c => c.user_id === userId && c.id === comparisonId);
+                    // Update - find via index to update in place
+                    const currentIndex = data.comparisons.findIndex(c => c === currentComparison);
                     newComparison = {
-                        ...data.comparisons[currentIndex],
-                        ...comparison
+                        ...currentComparison,
+                        ...comparisonUpdate
                     };
                     data.comparisons[currentIndex] = newComparison;
                 } else {
@@ -128,11 +167,12 @@ const saveComparison = (userId, comparisonId, comparison) => {
                     const id = getNextId(data.comparisons);
                     newComparison = {
                         ...models.comparison(),
-                        ...comparison,
+                        ...comparisonUpdate,
                         id,
                         user_id: userId
                     };
                     data.comparisons.push(newComparison);
+                    data.users.find(u => u.id === userId).comparison_ids.push(id);
                 }
 
                 saveData(data)
@@ -145,16 +185,13 @@ const deleteComparison = (userId, comparisonId) => {
     return new Promise((resolve, reject) => {
         getData()
             .then(data => {
-                if (!validateComparisonAuthorization(userId, comparisonId, data)) {
-                    reject('Comparison not found for this user');
+                const [ isComparisonValid, comparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                if (!isComparisonValid) {
+                    return reject(new Error('Comparison not found for this user'));
                 }
 
-                const after = data.comparisons.filter(c => c.user_id !== userId || c.id !== comparisonId);
-                if (data.comparisons.length === after.length) {
-                    reject('No comparison with specified ID found');
-                }
+                data.comparisons = data.comparisons.filter(c => c !== comparison);
 
-                data.comparisons = after;
                 saveData(data)
                     .then(() => resolve(comparisonId));
             });
@@ -167,47 +204,71 @@ const getParticipants = (userId, comparisonId) => {
     return new Promise((resolve, reject) => {
         getData()
             .then(data => {
-                if (!validateComparisonAuthorization(userId, comparisonId, data)) {
-                    reject('Comparison not found for this user');
+                const [ isComparisonValid, comparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                if (!isComparisonValid) {
+                    return reject(new Error('Comparison not found for this user'));
                 }
 
-                resolve(data.participants.filter(p => p.comparison_id === comparisonId));
+                return resolve(comparison.participants);
             });
     });
 };
 
-const saveParticipant = (userId, comparisonId, participantId, participant) => {
+const getParticipant = (userId, comparisonId, participantId) => {
     return new Promise((resolve, reject) => {
         getData()
             .then(data => {
-                if (!validateComparisonAuthorization(userId, comparisonId, data)) {
-                    reject('Comparison not found for this user');
+                const [ isComparisonValid, comparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                if (!isComparisonValid) {
+                    return reject(new Error('Comparison not found for this user'));
                 }
+
+                const [ doesParticipantExist, participant ] = validateParticipantExists(comparison, participantId);
+                if (!doesParticipantExist) {
+                    return reject(new Error('Participant not found for this comparison'));
+                }
+
+                return resolve(participant);
+            });
+    });
+};
+
+const saveParticipant = (userId, comparisonId, participantId, participantUpdate) => {
+    return new Promise((resolve, reject) => {
+        getData()
+            .then(data => {
+                const [ isComparisonValid, comparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                if (!isComparisonValid) {
+                    return reject(new Error('Comparison not found for this user'));
+                }
+
+                participantUpdate = filterKeys(participantUpdate, [ 'name' ]);
 
                 let newParticipant;
                 if (participantId) {
-                    // Update
-                    const currentIndex = data.participants.findIndex(p => p.id === participantId);
+                    const [ doesParticipantExist, currentParticipant ] = validateParticipantExists(comparison, participantId);
+                    if (!doesParticipantExist) {
+                        return reject(new Error('Participant not found for this comparison'));
+                    }
+
+                    // Update - use index to be able to update in place
+                    const currentIndex = comparison.participants.findIndex(p => p === currentParticipant);
                     newParticipant = {
-                        ...data.participants[currentIndex],
-                        ...participant
+                        ...currentParticipant,
+                        ...participantUpdate
                     };
-                    data.participants[currentIndex] = newParticipant;
+                    comparison.participants[currentIndex] = newParticipant;
                 } else {
                     // Create
-                    const id = getNextId(data.participants);
+                    const id = getNextId(comparison.participants);
                     newParticipant = {
                         ...models.participant(),
-                        ...participant,
+                        ...participantUpdate,
                         id,
                         score: 0,
                         comparison_id: comparisonId
                     };
-                    data.participants.push(newParticipant);
-
-                    // Update foreign key relationships
-                    const comparison = data.comparisons.find(c => c.id === comparisonId);
-                    comparison.participant_ids.push(id);
+                    comparison.participants.push(newParticipant);
                 }
 
                 saveData(data)
@@ -220,19 +281,17 @@ const deleteParticipant = (userId, comparisonId, participantId) => {
     return new Promise((resolve, reject) => {
         getData()
             .then(data => {
-                if (!validateComparisonAuthorization(userId, comparisonId, data)) {
-                    reject('Comparison not found for this user');
+                const [ isComparisonValid, comparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                if (!isComparisonValid) {
+                    return reject(new Error('Comparison not found for this user'));
                 }
 
-                const after = data.participants.filter(p => p.comparision_id !== comparisonId || p.id !== participantId);
-                if (data.participants.length === after.length) {
-                    reject('No participant with specified IDs found');
+                const [ doesParticipantExist, participant ] = validateParticipantExists(comparison, participantId);
+                if (!doesParticipantExist) {
+                    return reject(new Error('Participant not found for this comparison'));
                 }
-                data.participants = after;
 
-                // Update foreign key relationships
-                const comparison = data.comparisons.find(c => c.id === comparisonId);
-                comparison.participant_ids = comparison.participant_ids.filter(pid => pid !== participantId);
+                comparison.participants = comparison.participants.filter(p => p !== participant);
 
                 saveData(data)
                     .then(() => resolve(participantId));
@@ -242,30 +301,33 @@ const deleteParticipant = (userId, comparisonId, participantId) => {
 
 /* Decisions */
 
-const createDecision = (userId, comparisonId, participantId, decision) => {
+const createDecision = (userId, comparisonId, decision) => {
     return new Promise((resolve, reject) => {
         getData()
             .then(data => {
-                if (!validateComparisonAuthorization(userId, comparisonId, data)) {
-                    reject('Comparison not found for this user');
+                const [ isComparisonValid, comparison ] = validateComparisonExistsAndAuthorized(userId, comparisonId, data);
+                if (!isComparisonValid) {
+                    return reject(new Error('Comparison not found for this user'));
                 }
 
+                const [ doesParticipantExist, participant ] = validateParticipantExists(comparison, decision.participant_id);
+                if (!doesParticipantExist) {
+                    return reject(new Error('Participant not found for this comparison'));
+                }
+
+                decision = filterKeys(decision, [ 'meal', 'location' ]);
+
                 // Create
-                const id = getNextId(data.decisions);
+                const id = getNextId(comparison.decisions);
                 const newDecision = {
                     ...models.decision(),
                     ...decision,
                     id,
                     comparison_id: comparisonId,
-                    partipant_id: participantId
+                    participant_id: participant.id
                 };
-                data.decisions.push(newDecision);
-
-                // Update foreign key relationships
-                const comparison = data.comparisons.find(c => c.id === comparisonId);
-                comparison.decision_ids.push(id);
-                const participant = data.participants.find(p => p.id === participantId);
-                participant.decision_ids.push(id);
+                comparison.decisions.push(newDecision);
+                participant.score += 1; // increment score
 
                 saveData(data)
                     .then(() => resolve(newDecision));
@@ -279,9 +341,11 @@ module.exports = {
     createSession,
     deleteSession,
     getComparisons,
+    getComparison,
     saveComparison,
     deleteComparison,
     getParticipants,
+    getParticipant,
     saveParticipant,
     deleteParticipant,
     createDecision

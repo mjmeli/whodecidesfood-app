@@ -3,9 +3,15 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const router = require('./routes');
+const config = require('../config');
 const authenicator = require('./helpers/authenticator');
+const resultHandlers = require('./helpers/resultHandlers');
 
 const app = express();
+
+if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
+}
 
 if (process.env.NODE_ENV === 'production') {
     console.log('DO NOT USE THIS IN PRODUCTION');
@@ -32,6 +38,9 @@ app.use(authenicator);
 
 // API routes
 app.use(router);
+
+// Errors - should be last
+app.use(resultHandlers.defaultErrorHandler);
 
 // Start server
 const port = 3000;

@@ -20,22 +20,20 @@ class ParticipantsController {
     get (req, res) {
         const [ userId, comparisonId, participantId ] = getIds(req);
 
-        db.getParticipants(userId, comparisonId)
-            .then(participants => {
-                const participant = participants.find(c => c.id === participantId);
-                createSuccess(participant, res);
-            })
+        db.getParticipant(userId, comparisonId, participantId)
+            .then(participant => createSuccess(participant, res))
             .catch(err => createErrors(404, err, res));
     }
 
     save (req, res) {
         const [ userId, comparisonId, participantId ] = getIds(req);
 
-        if (!req.body.name) {
-            return createErrors(400, 'Name is required', res);
+        const participant = req.body.participant ? req.body.participant : req.body;
+        if (!participant.name) {
+            return createErrors(400, 'name is required', res);
         }
 
-        db.saveParticipant(userId, comparisonId, participantId, req.body)
+        db.saveParticipant(userId, comparisonId, participantId, participant)
             .then(participant => createSuccess(participant, res))
             .catch(err => createErrors(404, err, res));
     }
